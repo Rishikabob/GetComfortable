@@ -4,11 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
+import {useFonts} from 'expo-font';
 
 const Stack = createNativeStackNavigator();
 
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    'Montserrat' : require('./assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf')
+  })
   return (
     <NavigationContainer>
       <Stack.Navigator>
