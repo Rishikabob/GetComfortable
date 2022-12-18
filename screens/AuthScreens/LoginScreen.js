@@ -2,23 +2,31 @@ import { TextInput, Image, Pressable, KeyboardAvoidingView, StyleSheet, Text, To
 import React, { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useTogglePasswordVisibility } from './hooks/useTogglePasswordVisibility';
-import {auth} from "../firebaseConfig"
+import { useTogglePasswordVisibility } from '../../hooks/useTogglePasswordVisibility';
+import {auth} from "../../firebaseConfig"
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/core';
-  
 
+
+  
+//TODO
+// Find a way to make password entry more secure.
 
 const LoginScreen = () => {
+    // eye button for password entry
     const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
     
     const navigation = useNavigation()
-
+    //listner to check if user is logged in.
+    //unsubscribe is used to stop listener.
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, user => {
+            //logic to determine user type and redirect user goes here.
+            
             if (user)
-                navigation.replace("Home")
+                navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
+                //navigation.replace("UserHomeScreens", {screen: "UserHome"})
         })
         return unsubscribe
     }, [])
@@ -26,6 +34,7 @@ const LoginScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     
+    //handles login
     const handleLogin = () => {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
@@ -34,21 +43,30 @@ const LoginScreen = () => {
             console.log(user.email);
         })
         .catch((error) => {
-            console.log(error)
+            if (error.code === 'auth/wrong-password') {
+                alert('Password is incorrect');
+                } else if (error.code === 'auth/network-request-failed') {
+                 alert('Please connect to a network to Login');
+                } else if (error.code === 'auth/user-not-found') {
+                    alert('User doesnt exit. Please contact School Admin');
+                } else if (error.code === 'auth/invalid-email') {
+                 alert('Invalid E-mail!');
+                 // email wrong format
+                }
         })
        
         
     }
-
+//Renders the Page
   return (
     <KeyboardAvoidingView
     style={styles.container}
     behavior="padding"
-    >
+    > 
     <View style={styles.imageContainer}>
         <Image
             style={styles.logo}
-            source={require('../assets/images/logo_white.png')}
+            source={require('../../assets/images/logo_white.png')}
         />
 
         
@@ -94,7 +112,7 @@ your account
         secureTextEntry={passwordVisibility}
         enablesReturnKeyAutomatically
         />
-        <Pressable onPress={handlePasswordVisibility}>
+        <Pressable padding={20} onPress={handlePasswordVisibility}>
           <MaterialCommunityIcons name={rightIcon} size={22} color="white" />
         </Pressable>
         </LinearGradient>
@@ -102,7 +120,9 @@ your account
     </View>
 
     <View style={styles.forgotPassContainer}>
-        <TouchableOpacity style={styles.forgotPass}>
+        <TouchableOpacity style={styles.forgotPass} onPress={() => 
+        navigation.navigate("Forgot Password")
+        } >
             <Text style={styles.forgotPassText}>
                 Forgot Password?
             </Text>
@@ -135,6 +155,7 @@ your account
 }
 
 export default LoginScreen
+//Stylye sheet. This can be here or there can be a global style sheet. May need to transition this into a global one
 
 const styles = StyleSheet.create({
     container: {
@@ -147,9 +168,11 @@ const styles = StyleSheet.create({
         width: '80%'
     },
     input: {
-       width: '90%',
+       width: '80%',
        color: 'white',
        fontSize: 14,
+       paddingHorizontal: 15,
+    paddingVertical: 20,
        
     },
     buttonContainer: {
@@ -170,9 +193,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     linearGradientInput: {
-     
-        paddingHorizontal: 15,
-        paddingVertical: 20,
+        
         borderRadius: 8,
         marginTop: 40,
         flexDirection: 'row',
@@ -183,6 +204,7 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         borderRadius: 8,
         marginTop: 20,
+        marginBottom: 10,
         width: '80%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -215,7 +237,7 @@ const styles = StyleSheet.create({
     },
 
     forgotPassContainer: {
-        
+        paddingTop: 15
     },
 
     forgotPass: {
