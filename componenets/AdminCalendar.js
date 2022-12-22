@@ -71,6 +71,7 @@ calenderContainer: {
       shadowOpacity: 0.25,
       shadowRadius: 3,
       borderRadius:10,
+      elevation: 3,
       
     }
 

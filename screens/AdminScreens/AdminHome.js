@@ -12,14 +12,6 @@ const AdminHome = () => {
 
     const navigation = useNavigation()
 
-    const handleSignOut = () => {
-        auth.signOut()
-        .then(() => {
-          navigation.replace("AuthScreens", {screen: "Login"})
-        })
-        .catch(error => alert(error.message))
-    }
-
   return (
     <View style={styles.container}>
       <View style={styles.statusBar}/>
@@ -33,14 +25,6 @@ const AdminHome = () => {
       </Text>
       </View>
       <AdminCalendar/>
-      <TouchableOpacity
-      onPress={handleSignOut}
-      style={styles.button}>
-        <Text
-        style={styles.buttonText}>
-            Sign Out
-        </Text>
-      </TouchableOpacity>
     </View>
   )
 }

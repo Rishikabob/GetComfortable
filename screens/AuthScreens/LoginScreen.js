@@ -6,13 +6,15 @@ import { useTogglePasswordVisibility } from '../../hooks/useTogglePasswordVisibi
 import {auth} from "../../firebaseConfig"
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/core';
-
-
+import { useHeaderHeight } from '@react-navigation/elements'
+import Constants from 'expo-constants';
   
 //TODO
 // Find a way to make password entry more secure.
 
 const LoginScreen = () => {
+
+    const height = useHeaderHeight()
     // eye button for password entry
     const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
@@ -61,8 +63,11 @@ const LoginScreen = () => {
   return (
     <KeyboardAvoidingView
     style={styles.container}
+    collapsable={Platform.select({ios: 'true', android: null})}
     behavior="padding"
+    keyboardVerticalOffset={Platform.select({ios: 0, android: -500})}
     > 
+    <View style={styles.statusBar}/>
     <View style={styles.imageContainer}>
         <Image
             style={styles.logo}
@@ -159,11 +164,16 @@ export default LoginScreen
 
 const styles = StyleSheet.create({
     container: {
+        
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white'
     },
+    statusBar: {
+        backgroundColor: '#white',
+        height: Constants.statusBarHeight
+      },
     inputContainer: {
         width: '80%'
     },
@@ -176,11 +186,13 @@ const styles = StyleSheet.create({
        
     },
     buttonContainer: {
+        marginTop: 10,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
     },
     button: {
+       
         width: '110%',
         padding: 15,
         borderRadius: 8,
@@ -188,6 +200,7 @@ const styles = StyleSheet.create({
         
     },
     buttonText: {
+       
         color: 'white',
         fontWeight: '700',
         fontSize: 20,
@@ -200,11 +213,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     linearGradientButton: {
+       
         paddingHorizontal: 15,
         paddingVertical: 20,
         borderRadius: 8,
-        marginTop: 20,
-        marginBottom: 10,
+        marginTop: 0,
+        marginBottom: 0,
         width: '80%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -233,7 +247,7 @@ const styles = StyleSheet.create({
         resizeMode: 'stretch',
         width:290,
         height:205,
-        marginTop: -150
+        marginTop: Constants.statusBarHeight -225
     },
 
     forgotPassContainer: {

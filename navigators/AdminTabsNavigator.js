@@ -18,7 +18,7 @@ const AdminTabsNavigator = () => {
       headerShown: false,
       tabBarShowLabel: false,
       tabBarStyle: {
-        height: 90,
+        height: 70,
         paddingHorizontal: 5,
         paddingTop: 20,
         paddingBottom: 20,
@@ -32,12 +32,12 @@ const AdminTabsNavigator = () => {
       
     },
   })}>
-      
+      <AdminTabs.Screen options={{headerShown: false, title: "Home", tabBarButton: () => null,}} name="AdminHome" component={AdminHome} />
       <AdminTabs.Screen options={{headerShown: false, title: "Surveys",  tabBarIcon: ({focused}) => (
         <View 
         backgroundColor={focused ? '#003C39' : '#00645F'} style={styles.tabContainer}>
-          <Ionicons name="clipboard" size={40} color="white"/>
-          <Text style={{color: 'white', paddingTop: 5,}}>
+          <Ionicons name="clipboard" size={30} color="white"/>
+          <Text style={styles.iconText}>
             Surveys
           </Text>
         </View>
@@ -45,8 +45,8 @@ const AdminTabsNavigator = () => {
       
       <AdminTabs.Screen options={{headerShown: false, title: "Log Visit",  tabBarIcon: ({focused}) => (
         <View backgroundColor={focused ? '#003C39' : '#00645F'}style={styles.tabContainer}>
-          <Ionicons name="checkmark-done-circle" size={40} color="white"/>
-          <Text style={{color: 'white', paddingTop: 5,}}>
+          <Ionicons name="checkmark-done-circle" size={30} color="white"/>
+          <Text style={styles.iconText}>
             Log Vist
           </Text>
         </View>
@@ -54,8 +54,8 @@ const AdminTabsNavigator = () => {
       
       <AdminTabs.Screen options={{headerShown: false, title: "Resoruces",  tabBarIcon: ({focused}) => (
         <View backgroundColor={focused ? '#003C39' : '#00645F'}style={styles.tabContainer}>
-          <Ionicons name="stats-chart" size={40} color="white"/>
-          <Text style={{color: 'white', paddingTop: 5,}}>
+          <Ionicons name="stats-chart" size={30} color="white"/>
+          <Text style={styles.iconText}>
             Resources
           </Text>
         </View>
@@ -63,14 +63,14 @@ const AdminTabsNavigator = () => {
       
       <AdminTabs.Screen options={{headerShown: false, title: "Messages",  tabBarIcon: ({focused}) => (
         <View backgroundColor={focused ? '#003C39' : '#00645F'}style={styles.tabContainer}>
-          <Ionicons name="chatbubble-ellipses-sharp" size={40} color="white"/>
-          <Text style={{color: 'white', paddingTop: 5,}}>
+          <Ionicons name="chatbubble-ellipses-sharp" size={30} color="white"/>
+          <Text style={styles.iconText}>
             Messages
           </Text>
         </View>
       ),}}   name="AdminMessages" component={ADMMessageScreen} />
       
-      <AdminTabs.Screen options={{headerShown: false, title: "Home", tabBarButton: () => null,}} name="AdminHome" component={AdminHome} />
+      
       
     </AdminTabs.Navigator>
   );
@@ -97,10 +97,16 @@ const styles = StyleSheet.create({
     elevation:5,
   },
   tabContainer: {
-    width:80,
-    height: 70,
+    width:70,
+    height: 60,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  iconText: {
+    color: 'white', 
+    paddingTop: 5,
+    fontSize: 12,
+    fontWeight: '500',
   },
 })

@@ -1,26 +1,31 @@
 import { StyleSheet, Text,TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useRef } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
+import UserModal from '../screens/Settings/UserSettings';
 
 
 const AdminHomeTopBar = () => {
     const navigation = useNavigation()
+    
   return (
       <View style = {styles.topBarContainer}>
+        <View style={styles.iconsLeftContainer}>
         <TouchableOpacity onPress={() => 
         navigation.openDrawer()}>
-            <Ionicons name="menu" size={40} color="#00645F"/>
+            <Ionicons name="ios-menu" size={37} color="#00645F"/>
         </TouchableOpacity>
+        </View>
+        <View style={styles.iconsRightContainer}>
         <TouchableOpacity>
-            <Ionicons name="search" size={40} color="#00645F"/>
+            <Ionicons name="notifications" size={37} color="#00645F"/>
         </TouchableOpacity>
-        <TouchableOpacity>
-            <Ionicons name="notifications" size={40} color="#00645F"/>
+        <TouchableOpacity onPress={() => 
+            
+            navigation.navigate('User Settings')}>
+            <Ionicons name="md-person-circle" size={37} color="#00645F"/>
         </TouchableOpacity>
-        <TouchableOpacity>
-            <Ionicons name="md-person-circle" size={40} color="#00645F"/>
-        </TouchableOpacity>
+        </View>
       </View>
   )
 }
@@ -28,9 +33,19 @@ const AdminHomeTopBar = () => {
 export default AdminHomeTopBar
 
 const styles = StyleSheet.create({
+    iconsLeftContainer: {
+        //backgroundColor:'blue',
+    },
+    iconsRightContainer: {
+        //backgroundColor:'red',
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        width:'30%',
+        paddingRight:10
+    },
     topBarContainer: {
         alignSelf: 'stretch',
-        height: 52,
+        height: 47,
         flexDirection: 'row', // row
         backgroundColor: 'white',
         alignItems: 'center',
@@ -41,5 +56,6 @@ const styles = StyleSheet.create({
         shadowOffset: {width: 0, height: 6},
         shadowOpacity: 0.10,
         shadowRadius: 3,
+        elevation: 3
       },
 })

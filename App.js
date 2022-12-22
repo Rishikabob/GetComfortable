@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/AuthScreens/LoginScreen';
@@ -19,14 +19,18 @@ import ADMResourcesScreen from './screens/AdminScreens/ADMResourcesScreen'
 import ADMMessageScreen from './screens/AdminScreens/ADMMessageScreen'
 import AdminTabsNavigator from './navigators/AdminTabsNavigator';
 import AdminDrawerNavigator from './navigators/AdminDrawerNavigator';
-
+import ManageUsers from './screens/AdminScreens/AdminPortalScreens/ManageUsers';
+import AuthNavigator from './navigators/AuthNavigator';
+import ManageUsersNavigator from './navigators/drawerStacks/ManageUsersNavigator';
+import SplashScreen from './screens/SplashScreen';
+import UserModal from './screens/Settings/UserSettings';
+import UserModalTEST from './componenets/UserModalTEST';
 //Root Stack
 const Stack = createNativeStackNavigator();
 
 
 //define different user flows 
-
-//admin flow
+//TODO: Move to navigation folder
 
 //normal user flow i.e. student/parent
 const UserStack = createNativeStackNavigator();
@@ -38,37 +42,41 @@ function UserStackNavigator() {
   );
 }
 
-//Auth Flow
-const AuthStack = createNativeStackNavigator();
-function AuthStackNavigator() {
-  return (
-    <AuthStack.Navigator>
-      <AuthStack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
-      <AuthStack.Screen name="Forgot Password" component={ForgotPassScreen} />
-    </AuthStack.Navigator>
-  );
-}
 
 //APP LAYER...
 
 export default function App() {
+
+
   const [fontsLoaded] = useFonts({
     'Montserrat' : require('./assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf')
   })
   return (
     ///TODO: change default to splash screen, which then checks if user is authenticated or not, then show right stack based on that.
-    // Root stack. Contains nested stack of: Login screen(TODO: Change to auth stack) ;; Admin Stack ;; User Stack ;; TODO: Add Mentor Stack
+    // Root stack. Contains nested stack of: Login screen ;; Admin Stack ;; User Stack ;; TODO: Add Mentor Stack and splash screen at the top.
     <NavigationContainer>
       <Stack.Navigator screenOptions={{}}>
-        <Stack.Screen options={{headerShown: false}} name="AuthScreens" component={AuthStackNavigator} />
+        <Stack.Screen options={{headerShown: false, animation: 'none'}} name="SplashScreen" component={SplashScreen}/>
+        <Stack.Screen options={{headerShown: false}} name="AuthScreens" component={AuthNavigator} />
         <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="AdminHomeScreens" component={AdminDrawerNavigator} />
         <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="UserHomeScreens" component={UserStackNavigator} />
+        
+        <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
+          <Stack.Screen options={{title: 'Account Settings'}} name = "User Settings"  component={UserModal} />
+          <Stack.Screen options={{title: 'Other Page', }} name = "User Settings TEST"  component={UserModalTEST}  />
+        </Stack.Group>
+        {/* <Stack.Screen options={{
+      headerShown: true,
+      headerTitleAlign: 'center',
+      title: 'Manage Users',
+      headerTintColor: '#00645F',
+    }}  name = "ManageUsersNav" component={ManageUsersNavigator}/> */}
       </Stack.Navigator>
     </NavigationContainer>
     
   );
 }
-
+// options={{headerTintColor: '#00645F', headerStyle: {backgroundColor:'#BDDFDE'}}}
 const styles = StyleSheet.create({
   container: {
     flex: 1,

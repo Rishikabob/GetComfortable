@@ -1,69 +1,102 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { createDrawerNavigator } from '@react-navigation/drawer'
+import { createDrawerNavigator, DrawerItem, DrawerItemList, DrawerContentScrollView } from '@react-navigation/drawer'
 import AdminTabsNavigator from './AdminTabsNavigator'
 import AdminHome from '../screens/AdminScreens/AdminHome'
 import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/core';
+import ManageUsersNavigator from './drawerStacks/ManageUsersNavigator'
 
 
 const AdminDrawerNavigator = () => {
     const AdminDrawer = createDrawerNavigator()
   return (
     <AdminDrawer.Navigator drawerContent={props => <DrawerView {...props}/>} screenOptions={() => ({
+      drawerActiveBackgroundColor: '#00645F',
+      drawerActiveTintColor:'#FFFFFF',
+      drawerInactiveTintColor: '#333',
       headerShown: false,
-      swipeEdgeWidth: 0,
-      
+      swipeEdgeWidth: 0,   
+      drawerLabelStyle: {
+        fontSize: 16.7,
+        fontWeight: '700', 
+        paddingVertical: 10,
+        marginLeft: -20,
+      }
   })}>
-      <AdminDrawer.Screen name ="AdminBottomTabs" component={AdminTabsNavigator}/> 
-      <AdminDrawer.Screen name ="AdminHomeScreen" component={AdminHome}/> 
+      <AdminDrawer.Screen options={{
+      drawerIcon: ({color}) => (
+        <Ionicons name="home-outline" size={22} color={color} />
+      ),
+      title: 'Home',
+    }}name ="AdminBottomTabs" component={AdminTabsNavigator}/> 
+      <AdminDrawer.Screen options={{
+      drawerIcon: ({color}) => (
+        <Ionicons name="notifications-outline" size={22} color={color} />
+      ),
+      headerShown: true,
+      headerTitleAlign: 'center',
+      title: 'Notifications',
+      headerTintColor: '#00645F',
+    }}name ="CreateNewNotifScreens" component={ManageUsersNavigator}/> 
+    <AdminDrawer.Screen options={{
+      drawerIcon: ({color}) => (
+        <Ionicons name="person-outline" size={22} color={color} />
+      ),
+      headerShown: true,
+      headerTitleAlign: 'center',
+      title: 'Users',
+      headerTintColor: '#00645F',
+    }}name ="ManageUsersScreens" component={ManageUsersNavigator}/>  
+    <AdminDrawer.Screen options={{
+      drawerIcon: ({color}) => (
+        <Ionicons name="clipboard-outline" size={22} color={color} />
+      ),
+      headerShown: true,
+      headerTitleAlign: 'center',
+      title: 'Forms',
+      headerTintColor: '#00645F',
+    }}name ="ManageFormsScreens" component={ManageUsersNavigator}/>  
+    <AdminDrawer.Screen options={{
+      drawerIcon: ({color}) => (
+        <Ionicons name="calendar-outline" size={22} color={color} />
+      ),
+      headerShown: true,
+      headerTitleAlign: 'center',
+      title: 'Calendars',
+      headerTintColor: '#00645F',
+    }}name ="UpdateCalendarScreens" component={ManageUsersNavigator}/>  
+    <AdminDrawer.Screen options={{
+      drawerIcon: ({color}) => (
+        <Ionicons name="newspaper-outline" size={22} color={color} />
+      ),
+      headerShown: true,
+      headerTitleAlign: 'center',
+      title: 'Reports',
+      headerTintColor: '#00645F',
+    }}name ="ManageReportsScreens" component={ManageUsersNavigator}/>   
+      
     </AdminDrawer.Navigator> 
   )
 }
-function DrawerView() {
+function DrawerView(props) {
+  const navigation = useNavigation()
   return (
     
-    <View style={styles.container}>
-      <View style={styles.statusBar}/>
-      <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>
-              Admin Portal
-          </Text>
-      </View>
-      <View style={styles.optionsContainer}>
-        <TouchableOpacity style={styles.optionsTouchable}>
-          <Text style={styles.optionsText}>
-            Create New Notification
-          </Text>
-          <Ionicons name="md-caret-forward-outline" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.optionsTouchable}>
-          <Text style={styles.optionsText}>
-            Manage Users
-          </Text>
-          <Ionicons name="md-caret-forward-outline" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.optionsTouchable}>
-          <Text style={styles.optionsText}>
-            Manage Forms
-          </Text>
-          <Ionicons name="md-caret-forward-outline" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.optionsTouchable}>
-          <Text style={styles.optionsText}>
-            Update Calender
-          </Text>
-          <Ionicons name="md-caret-forward-outline" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.optionsTouchable}>
-          <Text style={styles.optionsText}>
-            Manage Reports
-          </Text>
-          <Ionicons name="md-caret-forward-outline" size={24} color="black" />
-          
-        </TouchableOpacity>
-      </View>
+    <View {...props}>
+    <View style={styles.statusBar}/>
+    <View style={styles.headerContainer}>
+      <Text style={styles.headerText}>
+        Admin Portal
+      </Text>
     </View>
+    <View style = {styles.listContainer}>
+      <DrawerItemList {...props} style={{height: 409}}/>
+    </View>
+    </View>
+    
+   
   )
 }
 export default AdminDrawerNavigator
@@ -77,7 +110,7 @@ const styles = StyleSheet.create({
     height: Constants.statusBarHeight
   },
   headerContainer: {
-    height:"10%",
+    height: 90,
     backgroundColor: '#BDDFDE',
     alignItems: 'center',
     justifyContent: 'center'
@@ -86,8 +119,7 @@ const styles = StyleSheet.create({
   headerText: {
     color: '#00645F',
     fontWeight: '700',
-    fontSize: 24,
-    paddingBottom:0,
+    fontSize: 30,
   },
   optionsContainer:{
     flex: 1,
@@ -111,5 +143,8 @@ const styles = StyleSheet.create({
   optionsText: {
     fontWeight: '700',
     fontSize: 17,
+  },
+  listContainer: {
+    paddingTop: 15,
   },
 })
