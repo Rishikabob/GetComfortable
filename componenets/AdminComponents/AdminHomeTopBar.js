@@ -2,7 +2,7 @@ import { StyleSheet, Text,TouchableOpacity, View } from 'react-native'
 import React, { useRef } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
-import UserModal from '../screens/Settings/UserSettings';
+import UserModal from '../../screens/Settings/UserSettings';
 
 
 const AdminHomeTopBar = () => {

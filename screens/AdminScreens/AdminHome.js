@@ -4,8 +4,8 @@ import { auth } from '../../firebaseConfig'
 import { useNavigation } from '@react-navigation/core';
 import Constants from 'expo-constants';
 import { Calendar } from 'react-native-calendars';
-import AdminHomeTopBar from '../../componenets/AdminHomeTopBar';
-import AdminCalendar from '../../componenets/AdminCalendar';
+import AdminHomeTopBar from '../../componenets/AdminComponents/AdminHomeTopBar';
+import AdminCalendar from '../../componenets/AdminComponents/AdminCalendar';
 
 
 const AdminHome = () => {

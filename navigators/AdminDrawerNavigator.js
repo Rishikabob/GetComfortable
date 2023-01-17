@@ -17,7 +17,7 @@ const AdminDrawerNavigator = () => {
       drawerActiveTintColor:'#FFFFFF',
       drawerInactiveTintColor: '#333',
       headerShown: false,
-      swipeEdgeWidth: 0,   
+      //swipeEdgeWidth: 0,   
       drawerLabelStyle: {
         fontSize: 16.7,
         fontWeight: '700', 

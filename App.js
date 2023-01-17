@@ -25,6 +25,7 @@ import ManageUsersNavigator from './navigators/drawerStacks/ManageUsersNavigator
 import SplashScreen from './screens/SplashScreen';
 import UserModal from './screens/Settings/UserSettings';
 import UserModalTEST from './componenets/UserModalTEST';
+import AddUserModal from './screens/AdminScreens/AdminPortalScreens/AddUserModal';
 //Root Stack
 const Stack = createNativeStackNavigator();
 
@@ -63,7 +64,10 @@ export default function App() {
         
         <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
           <Stack.Screen options={{title: 'Account Settings'}} name = "User Settings"  component={UserModal} />
-          <Stack.Screen options={{title: 'Other Page', }} name = "User Settings TEST"  component={UserModalTEST}  />
+        </Stack.Group>
+
+        <Stack.Group  screenOptions={{ presentation:'modal', headerTintColor: '#00645F'}}>
+          <Stack.Screen options={{title: 'Create an Account'}} name = "Add User"  component={AddUserModal} />
         </Stack.Group>
         {/* <Stack.Screen options={{
       headerShown: true,

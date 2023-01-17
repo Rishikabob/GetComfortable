@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import AdminTopBar from '../../componenets/AdminTopBar'
+import AdminTopBar from '../../componenets/AdminComponents/AdminTopBar'
 import Constants from 'expo-constants';
 
 
