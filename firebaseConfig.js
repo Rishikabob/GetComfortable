@@ -6,6 +6,7 @@ import {getAuth} from "firebase/auth";
 import {getDatabase} from "firebase/database";
 
 
+
 const firebaseConfig = {
     apiKey: "AIzaSyBoqjtlni6uTYZAcOFaWryjs7vl3Ivo-64",
     authDomain: "get-comfortable.firebaseapp.com",

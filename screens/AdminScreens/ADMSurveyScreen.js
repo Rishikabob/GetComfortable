@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import WebView from 'react-native-webview'
 import AdminTopBar from '../../componenets/AdminComponents/AdminTopBar'
 import Constants from 'expo-constants';
 
@@ -10,6 +11,9 @@ const ADMSurveyScreen = () => {
       <View style={styles.statusBar}/>
       <AdminTopBar/>
       <Text>ADMSurveyScreen</Text>
+      {/* <SafeAreaView style={{flex: 1}}>
+       <WebView style={styles.webViewContainer} originWhitelist={['*']} source={{ uri: 'https://form.jotform.com/230333726370147' }} />
+      </SafeAreaView> */}
     </View>
   )
 }
@@ -25,5 +29,9 @@ const styles = StyleSheet.create({
   statusBar: {
     backgroundColor: '#white',
     height: Constants.statusBarHeight
+  },
+  webViewContainer: {
+    width: 400,
+    height: 200
   },
 })

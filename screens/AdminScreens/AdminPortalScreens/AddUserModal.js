@@ -1,4 +1,4 @@
-import { TextInput, KeyboardAvoidingView, StyleSheet, Pressable,Text, TouchableOpacity, View } from 'react-native'
+import { TextInput, KeyboardAvoidingView, StyleSheet, Pressable,Text, TouchableOpacity, View, Picker } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
@@ -6,18 +6,32 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTogglePasswordVisibility } from '../../../hooks/useTogglePasswordVisibility';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
+import {ref, set, push} from "firebase/database"
+import {db, auth} from "../../../firebaseConfig"
+import {getAuth} from "firebase/auth"
+import DropDownPicker from 'react-native-dropdown-picker';
+
+
 
 const AddUserModal = () => {
     const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
-
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [accountType, setAccountType] = useState('')
+    const [emailError, setEmailError] = useState("")
     const [name, setName] = useState('')
-
+    const [nameError, setNameError] = useState('')
     const navigation = useNavigation()
+    const currentAuth = getAuth()
+    const [accountError, setAccountError] = useState('')
+
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [accountType, setAccountType] = useState([
+             {label: 'User', value: 'user'},                  
+             {label: 'Mentor', value: 'mentor'},
+             {label: 'Admin', value: 'admin'},
+               ]);
+
 
     useEffect(() => {
         navigation.setOptions({headerRight: () => (
@@ -27,8 +41,57 @@ const AddUserModal = () => {
             
             )})
     }, [navigation])
+
+    const createUser = () => {
+      var emailValid = false;
+      var nameValid = false;
+      var accountValid = false;
+      console.log("Create User clicked")
+      console.log(name)
+      console.log(email)
+      console.log(value)
+      //email check
+      const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+           if (reg.test(email) === true){
+              setEmailError("");
+              emailValid = true
+           }
+           else{
+            setEmailError("Not a valid email");
+           }
+      //name check
+      if (name.length == 0) {
+        setNameError("Name is required")
+      } else {
+        setNameError("")
+        nameValid = true
+      }
+      //account type check
+      if (value == null) {
+        setAccountError("Must select an account type")
+      } else {
+        setAccountError("")
+        accountValid = true
+      }
+      //TODO: Actually do this in DB
+      //create account in DB once all info is valid
+      if (emailValid && nameValid && accountValid) {
+        writeData(name,email,value)
+        alert("Account Created")
+        setEmail('')
+        setName('')
+      }
+  }
+  function writeData(name, email, accountType) {
+    const dbRef = ref(db,'invitedUsers/')
+    push(dbRef, {
+      email: email,
+      name: name,
+      accountType: accountType})
+  }
+
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
         <KeyboardAvoidingView style={styles.KAVcontainer}
     collapsable={Platform.select({ios: 'true', android: null})}
     behavior='padding'
@@ -44,6 +107,9 @@ const AddUserModal = () => {
         style={styles.input} 
         />
         </View>
+        {nameError.length > 0 &&
+                  <Text style={styles.errorText}>{nameError}</Text>
+                }
       <View
         style={styles.linearGradientInput}
         >
@@ -53,59 +119,37 @@ const AddUserModal = () => {
         style={styles.input} 
         />
         </View>
-        <View
-        style={styles.linearGradientInput}
-        >
-        <TextInput placeholder='Account Type'
-        value={accountType}
-        onChangeText = {text => setAccountType(text)} 
-        style={styles.input} 
+        {emailError.length > 0 &&
+                  <Text style={styles.errorText}>{emailError}</Text>
+                }
+       
+        <View style={styles.dropDownContainer}>
+          <Text style={styles.formText}>
+            Account Type
+          </Text>
+        <DropDownPicker
+        open={open}
+        value={value}
+        items={accountType}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setAccountType}
+        zIndex={3000}
+        zIndexInverse={1000}
         />
         </View>
-        <View
-        style={styles.linearGradientInput}
-        >
-        <TextInput placeholder='Type Password'
-        name="password"
-        value={password}
-        onChangeText = {text => setPassword(text)} 
-        style={styles.input}
-        autoCapitalize="none"
-        autoCorrect={false}
-        textContentType="password"
-        secureTextEntry={passwordVisibility}
-        enablesReturnKeyAutomatically
-        />
-        <Pressable padding={10} onPress={handlePasswordVisibility}>
-          <MaterialCommunityIcons name={rightIcon} size={22} color="black" />
-        </Pressable>
-        </View>
-        <View
-        style={styles.linearGradientInput}
-        >
-        <TextInput placeholder='Confirm Password'
-        name="password"
-        value={confirmPassword}
-        onChangeText = {text => setConfirmPassword(text)} 
-        style={styles.input}
-        autoCapitalize="none"
-        autoCorrect={false}
-        textContentType="password"
-        secureTextEntry={passwordVisibility}
-        enablesReturnKeyAutomatically
-        />
-        <Pressable padding={10} onPress={handlePasswordVisibility}>
-          <MaterialCommunityIcons name={rightIcon} size={22} color="black" />
-        </Pressable>
-        </View>
+        {accountError.length > 0 &&
+                  <Text style={styles.errorText}>{accountError}</Text>
+                }
+       
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={createUser}>
         <Text style={styles.buttonText}>
             Create Account
         </Text>
       </TouchableOpacity>
       </KeyboardAvoidingView>
-    </ScrollView>
+    </View>
   )
 }
 
@@ -117,15 +161,31 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width:28,
         height:28,
-        borderRadius:14,
+        borderRadius:10,
         opacity:0.8,
         backgroundColor: '#FF3434',
+    },
+    formText: {
+      padding:10,
+      fontSize: 16,
+
+    },
+    errorText: {
+      paddingTop: 5,
+      color: 'red',
+      zIndex: -5,
+
+    },
+    dropDownContainer: {
+      marginTop:5,
+      marginBottom:15,
     },
     KAVcontainer: {
         
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
+        
         backgroundColor: 'white'
     },
     container: {
@@ -146,9 +206,10 @@ const styles = StyleSheet.create({
         
      },  
      linearGradientInput: {
-        borderBottomWidth:2,
-        borderColor: 'lightgray',
-        marginTop: 15,
+       borderWidth:1,
+       borderRadius: 7,
+        borderColor: 'black',
+        marginTop: 10,
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -158,7 +219,8 @@ const styles = StyleSheet.create({
         padding:10,
         backgroundColor: '#00645F',
         width: '80%',
-        borderRadius: 5
+        borderRadius: 5,
+        zIndex: -5,
     },
     buttonText: {
         color: 'white',

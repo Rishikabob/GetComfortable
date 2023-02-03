@@ -26,6 +26,7 @@ import SplashScreen from './screens/SplashScreen';
 import UserModal from './screens/Settings/UserSettings';
 import UserModalTEST from './componenets/UserModalTEST';
 import AddUserModal from './screens/AdminScreens/AdminPortalScreens/AddUserModal';
+import AddChatScreen from './screens/MessageScreens/AddChatScreen';
 //Root Stack
 const Stack = createNativeStackNavigator();
 
@@ -62,13 +63,13 @@ export default function App() {
         <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="AdminHomeScreens" component={AdminDrawerNavigator} />
         <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="UserHomeScreens" component={UserStackNavigator} />
         
+        <Stack.Screen options={{headerShown: true, headerBackButtonMenuEnabled: false, title: "Add Chat"}} name="AddChatScreen" component={AddChatScreen} />
+        
         <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
           <Stack.Screen options={{title: 'Account Settings'}} name = "User Settings"  component={UserModal} />
         </Stack.Group>
 
-        <Stack.Group  screenOptions={{ presentation:'modal', headerTintColor: '#00645F'}}>
-          <Stack.Screen options={{title: 'Create an Account'}} name = "Add User"  component={AddUserModal} />
-        </Stack.Group>
+        
         {/* <Stack.Screen options={{
       headerShown: true,
       headerTitleAlign: 'center',

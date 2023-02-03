@@ -2,10 +2,10 @@ import { TouchableOpacity, ScrollView, StyleSheet, Text, View } from 'react-nati
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons';
 
-const ManageUsersItems = ({usersOptions}) => {
+const AdminListItems = ({items}) => {
   return (
     <ScrollView style={styles.container}>
-      {usersOptions.map(({title, subTitle, icon, iconBoxColor, onPress},index) => <TouchableOpacity onPress={onPress} style={styles.touchableContainer}key={title}>
+      {items.map(({title, subTitle, icon, iconBoxColor, onPress},index) => <TouchableOpacity onPress={onPress} style={styles.touchableContainer}key={title}>
         <View style={styles.innerItemsContainer}>
             <View style={styles.topItems}>
                 <View  style={{...styles.iconContainer, backgroundColor: `${iconBoxColor}`} }>
@@ -29,7 +29,7 @@ const ManageUsersItems = ({usersOptions}) => {
   )
 }
 
-export default ManageUsersItems
+export default AdminListItems
 
 const styles = StyleSheet.create({
     container: {

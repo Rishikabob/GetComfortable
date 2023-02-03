@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import ManageUsersItems from '../../../componenets/AdminComponents/ManageUsersItems';
+import AdminListItems from '../../../componenets/AdminComponents/AdminListItems';
 import { useNavigation } from '@react-navigation/core';
 
 const ManageUsers = () => {
@@ -14,7 +14,7 @@ const ManageUsers = () => {
     {title:'Delete User', subTitle: null, icon: 'person-remove-outline', iconBoxColor: 'rgb(255, 52, 52)', onPress: () => {}},
   ];
   return (
-    <ManageUsersItems usersOptions = {usersOptions} />
+    <AdminListItems items = {usersOptions} />
   )
 }
 

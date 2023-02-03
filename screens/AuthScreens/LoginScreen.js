@@ -153,6 +153,17 @@ your account
         </TouchableOpacity>
 
     </View>
+    <View>
+        <Text style={styles.registerText}>
+            Need to complete account registration?
+        </Text>
+        <TouchableOpacity style={styles.registerButton} onPress={() => 
+        navigation.navigate("RegisterScreen")}>
+            <Text style={styles.registerButtonText}>
+                Complete Registration
+            </Text>
+        </TouchableOpacity>
+    </View>
 
     </KeyboardAvoidingView>
 
@@ -208,7 +219,7 @@ const styles = StyleSheet.create({
     linearGradientInput: {
         
         borderRadius: 8,
-        marginTop: 40,
+        marginTop: 20,
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -251,18 +262,37 @@ const styles = StyleSheet.create({
     },
 
     forgotPassContainer: {
-        paddingTop: 15
+        paddingTop: 5
     },
 
     forgotPass: {
-        paddingTop: 15
+        paddingTop: 0
     },
 
     forgotPassText: {
-        opacity: 0.4,
-        color:'light-blue',
+        opacity: 0.6,
+        color:'blue',
         fontWeight: '700',
         textDecorationLine: 'underline',
     },
+    registerText: {
+        padding: 5,
+        alignSelf: 'center',
+        fontWeight: '700',
+    },
+
+    registerButton: {
+        backgroundColor: '#0059FF',
+        
+        padding: 20,
+        borderRadius: 10,
+        width: '50%',
+        alignSelf: 'center'    
+    },
+    registerButtonText: {
+        color: "white",
+        fontWeight: "700",
+    },
+
 
 })

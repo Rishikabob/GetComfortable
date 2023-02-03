@@ -7,6 +7,7 @@ import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import ManageUsersNavigator from './drawerStacks/ManageUsersNavigator'
+import ManageFormsNavigator from './drawerStacks/ManageFormsNavigator'
 
 
 const AdminDrawerNavigator = () => {
@@ -57,7 +58,7 @@ const AdminDrawerNavigator = () => {
       headerTitleAlign: 'center',
       title: 'Forms',
       headerTintColor: '#00645F',
-    }}name ="ManageFormsScreens" component={ManageUsersNavigator}/>  
+    }}name ="ManageFormsScreens" component={ManageFormsNavigator}/>  
     <AdminDrawer.Screen options={{
       drawerIcon: ({color}) => (
         <Ionicons name="calendar-outline" size={22} color={color} />
