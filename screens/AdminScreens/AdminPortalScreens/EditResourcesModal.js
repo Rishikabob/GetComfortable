@@ -13,7 +13,7 @@ const [icon, setIcon] = useState('')
   return (
     <KeyboardAwareScrollView>
         <View style={styles.innerContainer}>
-        <TextInput style = {styles.textInput} placeholder='Enter Title'/>
+        <TextInput style = {styles.textInput} placeholder='Enter Title' onChangeText={text => setTitle(text)}/>
         <TextInput style = {styles.textInput} placeholder='Enter Title'/>
         <TextInput style = {styles.textInput} placeholder='Enter Title'/>
         <TextInput style = {styles.textInput} placeholder='Enter Title'/>
