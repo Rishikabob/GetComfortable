@@ -1,8 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
+import {ref, onValue} from "firebase/database";
+import {db} from "../../../firebaseConfig"
+
 
 const SurveyFormsScreen = ({navigation}) => {
+  
+    const [surveys, setSurveys] = useState([])
 
     useLayoutEffect (() => {
         navigation.setOptions({
@@ -17,6 +22,16 @@ const SurveyFormsScreen = ({navigation}) => {
         });
     }, [])
 
+    const surveyListRef = ref(db,'surveys/')
+    //fetch and read data from database
+    // useEffect(() => {
+    //   onValue(surveyListRef,(snapshot) => {
+    //     const data = snapshot.val();
+    //     setSurveys(data)
+    //     console.log(surveys)
+    //   })
+    // },[])
+    
   return (
     <View>
       <Text>SurveyFormsScreen</Text>

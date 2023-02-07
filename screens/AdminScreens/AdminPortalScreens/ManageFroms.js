@@ -8,7 +8,7 @@ const ManageFroms = ({navigation}) => {
     const formOptions=[
         {title:'View All Forms', subTitle:'', icon:'clipboard-outline',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("ViewAllForms")}},
         {title:'View/Edit Survey Froms', subTitle:'', icon:'clipboard-outline',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("SurveyForms")}},
-        {title:'View/Edit Resoruces', subTitle:'', icon:'stats-chart',iconBoxColor:'#00645F', onPress: () => {}}
+        {title:'View/Edit Resoruces', subTitle:'', icon:'stats-chart',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("ResourcesScreen")}}
     ];
 
   return (

@@ -101,7 +101,7 @@ const AddUserModal = () => {
       <View style={styles.formInputsContainer}>
       <View style={styles.linearGradientInput}
         >
-        <TextInput placeholder='Type Name'
+        <TextInput placeholder='Type Name' placeholderTextColor="gray"
         value={name}
         onChangeText = {text => setName(text)} 
         style={styles.input} 
@@ -113,7 +113,7 @@ const AddUserModal = () => {
       <View
         style={styles.linearGradientInput}
         >
-        <TextInput placeholder='Type Email'
+        <TextInput placeholder='Type Email' placeholderTextColor="gray"
         value={email}
         onChangeText = {text => setEmail(text)} 
         style={styles.input} 
