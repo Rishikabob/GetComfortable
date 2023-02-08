@@ -20,6 +20,7 @@ const LoginScreen = () => {
     useTogglePasswordVisibility();
     
     const navigation = useNavigation()
+    
     //listner to check if user is logged in.
     //unsubscribe is used to stop listener.
     useEffect(() => {
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
        color: 'white',
        fontSize: 14,
        paddingHorizontal: 15,
-    paddingVertical: 20,
+        paddingVertical: 20,
        
     },
     buttonContainer: {

@@ -77,7 +77,7 @@ const AddUserModal = () => {
       //create account in DB once all info is valid
       if (emailValid && nameValid && accountValid) {
         writeData(name,email,value)
-        alert("Account Created")
+        
         setEmail('')
         setName('')
       }
@@ -87,7 +87,7 @@ const AddUserModal = () => {
     push(dbRef, {
       email: email,
       name: name,
-      accountType: accountType})
+      accountType: accountType}).then(() => alert("Account Created")).catch((error) => alert("Error while creating account. Please make sure you are connected to a network."))
   }
 
   return (
