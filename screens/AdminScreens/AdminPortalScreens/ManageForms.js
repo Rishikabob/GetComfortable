@@ -3,11 +3,11 @@ import React from 'react'
 import AdminListItems from '../../../componenets/AdminComponents/AdminListItems';
 
 
-const ManageFroms = ({navigation}) => {
+const ManageForms = ({navigation}) => {
 
     const formOptions=[
         {title:'View All Forms', subTitle:'', icon:'clipboard-outline',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("ViewAllForms")}},
-        {title:'View/Edit Survey Froms', subTitle:'', icon:'clipboard-outline',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("SurveyForms")}},
+        {title:'View/Edit Survey Forms', subTitle:'', icon:'clipboard-outline',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("SurveyForms")}},
         {title:'View/Edit Resoruces', subTitle:'', icon:'stats-chart',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("ResourcesScreen")}}
     ];
 
@@ -16,6 +16,6 @@ const ManageFroms = ({navigation}) => {
   )
 }
 
-export default ManageFroms
+export default ManageForms
 
 const styles = StyleSheet.create({})

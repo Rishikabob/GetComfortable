@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useLayoutEffect } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 
-const AllFromsScreen = ({navigation}) => {
+const AllFormsScreen = ({navigation}) => {
     useLayoutEffect (() => {
         navigation.setOptions({
             title: "All Froms and Resoruces",
@@ -19,12 +19,12 @@ const AllFromsScreen = ({navigation}) => {
   return (
     <View>
         
-      <Text>AllFromsScreen</Text>
+      <Text>AllFormsScreen</Text>
     </View>
   )
 }
 
-export default AllFromsScreen
+export default AllFormsScreen
 
 const styles = StyleSheet.create({
     headerIconFont: {

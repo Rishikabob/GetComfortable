@@ -8,10 +8,10 @@ const ResourcesScreen = ({navigation}) => {
     //change header options
     useLayoutEffect(() => {
         navigation.setOptions({
-            title: 'Resoruces',
+            title: 'Resources',
             headerBackTitle: 'Back',
             headerRight: () => 
-            <TouchableOpacity onPress={() => {navigation.navigate('EditResoruces')}}>
+            <TouchableOpacity onPress={() => {navigation.navigate('EditResource')}}>
                 <Ionicons name="pencil" size={24} color="black" />
                 <Text style={styles.headerIconText}>Edit</Text>
             </TouchableOpacity>
