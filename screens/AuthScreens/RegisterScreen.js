@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Pressable } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Pressable, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -7,63 +7,162 @@ import { useTogglePasswordVisibility } from '../../hooks/useTogglePasswordVisibi
 import {db, auth} from "../../firebaseConfig"
 
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword,} from 'firebase/auth';
-import { ref, child, get, orderByChild, equalTo } from 'firebase/database';
+import { ref, get, set } from 'firebase/database';
+import { async } from '@firebase/util';
 
 
-const RegisterScreen = () => {
+const RegisterScreen = (navigation) => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [nameError, setNameError] = useState('')
+    const [emailError, setEmailError] = useState("")
+    const [passwordError, setPasswordError] = useState("")
+    const [confirmPasswordError, setConfirmPasswordError] = useState("")
+    let accountType = ''
+    
 
     const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
-    //handle register
-
+    //This will be called once the register button is pressed 
     const handleRegister = () => {
-        //error check email to confirm it is in valid format
-        //TODO
+        //Before we check if email exists in db, we want to ensure that all the fields are not empty and are correct.
 
-        //check if email is in DB under invited users
-        const dbRef = ref(db)
-        //const invitedUsersRef = ref(db, 'invitedUsers/')
-        const invitedUsersRef = query(ref(db, 'invitedUsers/'), orderByChild('email') , equalTo('BOB@GMAIL.COM'));
-        const surveyListRef = ref(db,'surveys/')
-    //fetch and read data from database
-    useEffect(() => {
-      return onValue(invitedUsersRef,(snapshot) => {
-        let data = snapshot.val() || {};
-        console.log(data)
-        // let surveys = {...data};
-        // setSurveys(surveys)
-      });
-    }, [])  
-        // get(child(dbRef, `invitedUsers/`)).then((snapshot) => {
-        //     if (snapshot.exists()) {
-        //       console.log(snapshot.val());
-        //     } else {
-        //       console.log("No data available");
-        //     }
-        //   }).catch((error) => {
-        //     console.error(error);
-        //   });
+        var nameValid = false
+        var emailValid = false 
+        var passwordValid = false
+        var confirmPasswordValid = false 
 
+        //check name
+        if (name.length == 0) {
+            setNameError("Name is required")
+        } else {
+            setNameError("")
+            nameValid = true
+          }
+        
+        //check email
+        const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+           if (reg.test(email) === true){
+              setEmailError("");
+              emailValid = true
+           }
+           else{
+            setEmailError("Not a valid email");
+           }
+        
+        // check password
+        
 
-        console.log(name,email, password, confirmPassword)
-        //gets current auth token
-        const auth = getAuth()
-        //created account
-        // createUserWithEmailAndPassword(auth, email, password)
-        // //on successfully completion, add user info to Database and redirect user to correct set of screens based on account type
-        // .then((userCredential) => {
-        //     const user = userCredential.user;
-        //     console.log("Created In with EMAIL: ");
-        //     console.log(user.email);
-        // })
+        if (password.length >= 8) {
+            setPasswordError("");
+            passwordValid = true
+        } else  {
+            setPasswordError("Password must be at least 8 characters long.")
+        } 
+        
+        //check confirm pass
+        if (password === confirmPassword) {
+            setConfirmPasswordError("");
+            confirmPasswordValid = true
+        } else {
+            setConfirmPasswordError("Passwords do not match")
+        }
+
+        // if all are valid, continue
+        if (emailValid && nameValid && passwordValid && confirmPasswordValid) {
+            //console.log(name,email, password, confirmPassword)
+            // function defined below to check if email is in the invitedUsers List.
+            // .then() is used to ensure that checkEmailExists ran AND returned something. Without this,
+            // checkEmailExists will sometimes return undefined since it is not waiting for the DB get function
+            // to finish. 
+            checkEmailExists(email).then(result => {
+                // If email is in invitedUsers then, create an account with that email, 
+                // set account type to the correct one and then navigate to the correct
+                // navigation stack
+                if (result) {
+                    console.log("Registering : " +  name + " with email: " + email + " and Account Type: " + accountType)
+                    const auth = getAuth()
+                    //create account
+                    createUserWithEmailAndPassword(auth, email, password)
+                    //on successfully completion, add user info to Database and 
+                    //redirect user to correct set of screens based on account type
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        console.log("Created In with EMAIL: ");
+                        console.log(user.email);
+                        //TODO delete the node where this email is in the invitedUsers list after log in but before redirect. 
+                        
+                        //then add user to user node in db.
+                        writeData(user.uid,name,email,accountType)
+                        
+                        //direct user to correct stack
+                        //TODO: mentor and user are undefined for now. 
+                        // if (user &&  accountType === 'user') {
+                        //     navigation.replace("UserHomeScreens", {screen: "UserHome"})
+                        // } else if (user && accountType === 'mentor') {
+                        //     navigation.replace("MentorHomeScreens", {screen: "MentorHome"})
+                        // } else if (user && accountType === 'admin') {
+                        //     navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
+                        // }
+                    })
+                }
+                // else throw alert saying email not found. 
+                else {
+                    Alert.alert("Email not found. Please contact your school Admin.")
+                }
+               
+        })
+        }
         
     }
+    // Function to check if the email given is in the invitedUsers List.
+    function checkEmailExists(email) {
+        let emailExists = false ;
+        //Database reference. This references to the desired db directory 
+        const dbRef = ref(db,'invitedUsers/')
+        // firebase get. Return is needed before the get in this situation since we want the function call to wait on
+        // the get response.
+        // .then grabs the snapshot. which is an object with key value pairs
+        return get(dbRef).then(snapshot => {
+            //for each, iterates through each object and gets each child through childSnapshot
+            snapshot.forEach(childSnapshot => {
+                // get the actual value of the object using .val() and set to variable
+                const childData = childSnapshot.val();
+                //since childData is an object. we can still refer to the key value pairs using childData.email, childData.accountType, etc.
+                // refer to realtime database console to see how it is stored. 
+                // simple check to see if given email matches email in db
+                if (childData.email.toLowerCase() === email.toLowerCase()) {
+                    //console.log('Match Found! Given: ' + email + ' Actual: ' + childData.email)
+                    // once match is found we get the account type and set to accountType variable defined Above . This is the same way we got the email
+                    accountType = childData.accountType
+                    emailExists = true
+                    return emailExists
+    
+                }
+                
+            })
+            return emailExists
+        }).catch(error => {
+            console.error(error)
+            return false;
+        })
+    }
 
+    function writeData(uid, name, email, accountType) {
+        const dbRef = ref(db,'users/' + uid)
+        set(dbRef, {
+          email: email,
+          name: name,
+          accountType: accountType
+
+        }).then(() => {
+            console.log("data set in db")
+        }).catch((error) => alert("Error while creating account. Please make sure you are connected to a network."))
+      }
+    
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
@@ -78,15 +177,21 @@ const RegisterScreen = () => {
 
         
         <View style={styles.formContainer}>
-        <Text style={styles.textInputHeader}>Full Name</Text>
-            <View style={styles.inputContainer}>
+        <Text style={styles.textInputHeader}>Full Name </Text>
+        {nameError.length > 0 &&
+                  <Text style={styles.errorText}>{nameError}</Text>
+                }
+            <View style={{...styles.inputContainer, borderColor: nameError.length > 0 ? 'red' : '#0F6E69'  }}>
                 <TextInput style ={styles.textInput} placeholder='Enter Name'
                 onChangeText = {text => setName(text)} />
             </View>
         </View>
         <View style={styles.formContainer}>
         <Text style={styles.textInputHeader}>Email</Text>
-            <View style={styles.inputContainer}>
+        {emailError.length > 0 &&
+                  <Text style={styles.errorText}>{emailError}</Text>
+                }
+            <View style={{...styles.inputContainer, borderColor: emailError.length > 0 ? 'red' : '#0F6E69'  }}>
                 <TextInput style ={styles.textInput} placeholder='Enter Email'
                 value={email}
                 onChangeText = {text => setEmail(text)} 
@@ -95,7 +200,10 @@ const RegisterScreen = () => {
         </View>
         <View style={styles.formContainer}>
         <Text style={styles.textInputHeader}>Password</Text>
-            <View style={styles.inputContainer}>
+        {passwordError.length > 0 &&
+                  <Text style={styles.errorText}>{passwordError}</Text>
+                }
+        <View style={{...styles.inputContainer, borderColor: passwordError.length > 0 ? 'red' : '#0F6E69'  }}>
                 <TextInput style ={styles.textInput} placeholder='Enter Password'
                 name="password"
                 value={password}
@@ -113,7 +221,10 @@ const RegisterScreen = () => {
         </View>     
         <View style={styles.formContainer}>
             <Text style={styles.textInputHeader}>Confirm Password</Text>
-            <View style={styles.inputContainer}>
+            {confirmPasswordError.length > 0 &&
+                  <Text style={styles.errorText}>{confirmPasswordError}</Text>
+                }
+            <View style={{...styles.inputContainer, borderColor: confirmPasswordError.length > 0 ? 'red' : '#0F6E69'  }}>
                 <TextInput style ={styles.textInput} placeholder='Re-Enter Password'
                 name="confirmPassword"
                 value={confirmPassword}
@@ -167,7 +278,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         justifyContent: 'space-between',
-        borderColor: '#0F6E69',
+        //borderColor: '#0F6E69',
         borderBottomWidth:2.5,
         flexDirection: 'row',
         
@@ -198,5 +309,9 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 18,
     },
+    errorText: {
+        color: 'red',
+        fontSize: 12,
+      },
 
 })

@@ -1,18 +1,21 @@
-import { TextInput, Image, Pressable, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, TextInput, Image, Pressable, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTogglePasswordVisibility } from '../../hooks/useTogglePasswordVisibility';
-import {auth} from "../../firebaseConfig"
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/core';
 import { useHeaderHeight } from '@react-navigation/elements'
 import Constants from 'expo-constants';
+import { ref, get } from 'firebase/database';
+import {db, auth} from "../../firebaseConfig"
+
   
 //TODO
 // Find a way to make password entry more secure.
 
 const LoginScreen = () => {
+    
 
     const height = useHeaderHeight()
     // eye button for password entry
@@ -21,31 +24,58 @@ const LoginScreen = () => {
     
     const navigation = useNavigation()
     
-    //listner to check if user is logged in.
+    //listener to check if user is logged in.
+    //this works for both registration and log in
     //unsubscribe is used to stop listener.
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, user => {
             //logic to determine user type and redirect user goes here.
+            setTimeout(() => {
+                if (user) {
+                
+                    console.log(user.uid)
+                    const dbRef = ref(db, 'users/' + user.uid)
+                    get(dbRef).then(snapshot => {
+                        const snapshotData = snapshot.val()
+                        if (snapshotData.accountType === "admin") {
+                            navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
+                            setIsLoading(false)
+                        }
+                        else if (snapshotData.accountType === "mentor") {
+                            navigation.replace("MentorHomeScreens", {screen: "MentorHome"})
+                            setIsLoading(false)
+                        }
+                        else if (snapshotData.accountType === "user") {
+                            navigation.replace("UserHomeScreens", {screen: "UserHome"})
+                            setIsLoading(false)
+                    }
+                })
+                
+                
+            }
+            }, 2500)
             
-            if (user)
-                navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
-                //navigation.replace("UserHomeScreens", {screen: "UserHome"})
         })
         return unsubscribe
     }, [])
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
+
     
     //handles login
     const handleLogin = () => {
+        setIsLoading(true)
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
             console.log("Logged In with EMAIL: ");
             console.log(user.email);
+            
         })
         .catch((error) => {
+            setIsLoading(false)
             if (error.code === 'auth/wrong-password') {
                 alert('Password is incorrect');
                 } else if (error.code === 'auth/network-request-failed') {
@@ -139,6 +169,7 @@ your account
         <TouchableOpacity
             onPress={handleLogin}
             style={styles.button}
+            disabled={isLoading}
         >
     <LinearGradient
         colors={['#0F6E69','#6EB1AF']}
@@ -146,10 +177,11 @@ your account
         end={{x: 1, y: 0.5}}
         style={styles.linearGradientButton}
         >
-        <Text
+        {!isLoading && <Text
         style={styles.buttonText}>
             Login
-        </Text>
+        </Text>}
+        {isLoading && <ActivityIndicator style={{padding:4}}size={'small'} color="white"/>}
     </LinearGradient>
         </TouchableOpacity>
 
@@ -225,7 +257,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     linearGradientButton: {
-       
+        Height: 70,
         paddingHorizontal: 15,
         paddingVertical: 20,
         borderRadius: 8,
