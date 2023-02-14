@@ -11,3 +11,8 @@ App For Creature Comforts Brewery
 7. Install and Open Expo Go app on Device
 8. Scan QR code from terminal
 9. App should run??
+
+
+Dev Login test@gmail.com
+#Dependencies:
+npm install react-native-view
