@@ -34,7 +34,7 @@ const Stack = createNativeStackNavigator();
 //define different user flows 
 //TODO: Move to navigation folder
 
-//normal user flow i.e. student/parent
+//normal user flow i.e. student/parent ---- move to different file Like admin tabs navigator--- not drawer navigator since user doesnt have admindrawer on left
 const UserStack = createNativeStackNavigator();
 function UserStackNavigator() {
   return (

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Pressable, Alert } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Pressable, Alert, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -21,6 +21,8 @@ const RegisterScreen = (navigation) => {
     const [passwordError, setPasswordError] = useState("")
     const [confirmPasswordError, setConfirmPasswordError] = useState("")
     let accountType = ''
+    const [isLoading, setIsLoading] = useState(false)
+
     
 
     const { passwordVisibility, rightIcon, handlePasswordVisibility } =
@@ -29,7 +31,7 @@ const RegisterScreen = (navigation) => {
     //This will be called once the register button is pressed 
     const handleRegister = () => {
         //Before we check if email exists in db, we want to ensure that all the fields are not empty and are correct.
-
+        setIsLoading(true)
         var nameValid = false
         var emailValid = false 
         var passwordValid = false
@@ -38,6 +40,7 @@ const RegisterScreen = (navigation) => {
         //check name
         if (name.length == 0) {
             setNameError("Name is required")
+            setIsLoading(false)
         } else {
             setNameError("")
             nameValid = true
@@ -51,6 +54,7 @@ const RegisterScreen = (navigation) => {
            }
            else{
             setEmailError("Not a valid email");
+            setIsLoading(false)
            }
         
         // check password
@@ -61,6 +65,7 @@ const RegisterScreen = (navigation) => {
             passwordValid = true
         } else  {
             setPasswordError("Password must be at least 8 characters long.")
+            setIsLoading(false)
         } 
         
         //check confirm pass
@@ -69,6 +74,7 @@ const RegisterScreen = (navigation) => {
             confirmPasswordValid = true
         } else {
             setConfirmPasswordError("Passwords do not match")
+            setIsLoading(false)
         }
 
         // if all are valid, continue
@@ -91,7 +97,7 @@ const RegisterScreen = (navigation) => {
                     //redirect user to correct set of screens based on account type
                     .then((userCredential) => {
                         const user = userCredential.user;
-                        console.log("Created In with EMAIL: ");
+                        console.log("Created account with EMAIL: ");
                         console.log(user.email);
                         //TODO delete the node where this email is in the invitedUsers list after log in but before redirect. 
                         
@@ -107,11 +113,15 @@ const RegisterScreen = (navigation) => {
                         // } else if (user && accountType === 'admin') {
                         //     navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
                         // }
+                        setTimeout(() => {
+                            setIsLoading(false)
+                        },2600)
                     })
                 }
                 // else throw alert saying email not found. 
                 else {
                     Alert.alert("Email not found. Please contact your school Admin.")
+                    setIsLoading(false)
                 }
                
         })
@@ -140,13 +150,15 @@ const RegisterScreen = (navigation) => {
                     accountType = childData.accountType
                     emailExists = true
                     return emailExists
-    
+                    
                 }
                 
             })
             return emailExists
         }).catch(error => {
+            Alert.alert("Could not check email. Please make sure you are connected to a network.")
             console.error(error)
+            setIsLoading(false)
             return false;
         })
     }
@@ -160,7 +172,8 @@ const RegisterScreen = (navigation) => {
 
         }).then(() => {
             console.log("data set in db")
-        }).catch((error) => alert("Error while creating account. Please make sure you are connected to a network."))
+        }).catch((error) => {Alert.alert("Error while creating account. Please make sure you are connected to a network.")
+        setIsLoading(false)})
       }
     
 
@@ -177,6 +190,7 @@ const RegisterScreen = (navigation) => {
 
         
         <View style={styles.formContainer}>
+
         <Text style={styles.textInputHeader}>Full Name </Text>
         {nameError.length > 0 &&
                   <Text style={styles.errorText}>{nameError}</Text>
@@ -239,10 +253,18 @@ const RegisterScreen = (navigation) => {
                     <MaterialCommunityIcons name={rightIcon} size={22} color="black" />
                 </Pressable>
             </View>
-        </View>                
-        <TouchableOpacity style={styles.registerButtonContainer} onPress= {handleRegister}>
-            <Text style={styles.registerButtonText}>Register</Text>
+        </View> 
+
+
+        <TouchableOpacity style={styles.registerButtonContainer} onPress= {handleRegister} disabled={isLoading}>
+        {!isLoading && <Text
+        style={styles.registerButtonText}>
+            Register
+        </Text>}
+        {isLoading && <ActivityIndicator style={{padding:4}}size={'small'} color="white"/>}
         </TouchableOpacity>
+
+
         </View>
         </View>
     </KeyboardAwareScrollView>

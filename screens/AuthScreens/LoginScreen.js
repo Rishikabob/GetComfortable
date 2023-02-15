@@ -15,7 +15,9 @@ import {db, auth} from "../../firebaseConfig"
 // Find a way to make password entry more secure.
 
 const LoginScreen = () => {
-    
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
     const height = useHeaderHeight()
     // eye button for password entry
@@ -59,9 +61,7 @@ const LoginScreen = () => {
         return unsubscribe
     }, [])
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
+    
 
     
     //handles login
