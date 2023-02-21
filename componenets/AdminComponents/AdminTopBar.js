@@ -8,10 +8,7 @@ const AdminTopBar = () => {
   return (
     <View style = {styles.topBarContainer}>
         <View style={styles.iconsLeftContainer}>
-        <TouchableOpacity onPress={() => 
-        navigation.navigate("AdminHome", {screen: "AdminHomeScreen"})}>
-            <Ionicons name="home" size={37} color="#00645F"/>
-        </TouchableOpacity>
+        
         </View>  
         
         <View style={styles.iconsRightContainer}>

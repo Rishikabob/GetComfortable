@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React , {useEffect} from 'react'
-import { auth } from '../firebaseConfig';
+
 import { onAuthStateChanged } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/core';
+import { ref, get } from 'firebase/database';
+import {db, auth} from "../firebaseConfig"
+
 
 const SplashScreen = () => {
   //0 second delay
@@ -14,7 +17,23 @@ const SplashScreen = () => {
       //TODO: change to redirect based on user type in future also need to change login screen section if this is changed. 
         if (user)
             setTimeout (() => {
-              navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
+              console.log(user.uid)
+                    const dbRef = ref(db, 'users/' + user.uid)
+                    get(dbRef).then(snapshot => {
+                        const snapshotData = snapshot.val()
+                        if (snapshotData.accountType === "admin") {
+                            navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
+                            
+                        }
+                        else if (snapshotData.accountType === "mentor") {
+                            navigation.replace("MentorHomeScreens", {screen: "MentorHome"})
+                            
+                        }
+                        else if (snapshotData.accountType === "user") {
+                            navigation.replace("UserHomeScreens", {screen: "UserHome"})
+                            
+                    }
+                })
             }, timeout);
         else {
           setTimeout (() => {

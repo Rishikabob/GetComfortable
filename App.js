@@ -19,6 +19,7 @@ import ADMResourcesScreen from './screens/AdminScreens/ADMResourcesScreen'
 import ADMMessageScreen from './screens/AdminScreens/ADMMessageScreen'
 import AdminTabsNavigator from './navigators/AdminTabsNavigator';
 import AdminDrawerNavigator from './navigators/AdminDrawerNavigator';
+import UserTabsNavigator from './navigators/UserTabsNavigator';
 import ManageUsers from './screens/AdminScreens/AdminPortalScreens/ManageUsers';
 import AuthNavigator from './navigators/AuthNavigator';
 import ManageUsersNavigator from './navigators/drawerStacks/ManageUsersNavigator';
@@ -29,6 +30,7 @@ import AddUserModal from './screens/AdminScreens/AdminPortalScreens/AddUserModal
 import ChannelScreen from './screens/chatScreens/ChannelScreen';
 import AddChatScreen from './screens/MessageScreens/AddChatScreen';
 import { AppProvider } from './AppContext';
+import WebViewScreen from './screens/WebViewScreen';
 import {
   OverlayProvider
 } from 'stream-chat-expo'; 
@@ -40,14 +42,14 @@ const Stack = createNativeStackNavigator();
 //TODO: Move to navigation folder
 
 //normal user flow i.e. student/parent ---- move to different file Like admin tabs navigator--- not drawer navigator since user doesnt have admindrawer on left
-const UserStack = createNativeStackNavigator();
-function UserStackNavigator() {
-  return (
-    <UserStack.Navigator>
-      <UserStack.Screen options={{headerShown: false}} name="UserHome" component={UserHome} />
-    </UserStack.Navigator>
-  );
-}
+// const UserStack = createNativeStackNavigator();
+// function UserStackNavigator() {
+//   return (
+//     <UserStack.Navigator>
+//       <UserStack.Screen options={{headerShown: false}} name="UserHome" component={UserHome} />
+//     </UserStack.Navigator>
+//   );
+// }
 
 
 //APP LAYER...
@@ -71,13 +73,15 @@ export default function App() {
         <Stack.Screen options={{headerShown: false, animation: 'none'}} name="SplashScreen" component={SplashScreen}/>
         <Stack.Screen options={{headerShown: false}} name="AuthScreens" component={AuthNavigator} />
         <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="AdminHomeScreens" component={AdminDrawerNavigator} />
-        <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="UserHomeScreens" component={UserStackNavigator} />
+        <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="UserHomeScreens" component={UserTabsNavigator} />
         
         <Stack.Screen options={{headerShown: true, headerBackButtonMenuEnabled: false, title: "Add Chat"}} name="AddChatScreen" component={AddChatScreen} />
         
         <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
           <Stack.Screen options={{title: 'Account Settings'}} name = "User Settings"  component={UserModal} />
         </Stack.Group>
+
+        <Stack.Screen options = {{headerShown:true, headerBackButtonMenuEnabled: true,headerTintColor: '#00645F' }} name = "WebView"  component={WebViewScreen} />
         
 
         

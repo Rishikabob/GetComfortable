@@ -1,10 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View, FlatList, ScrollView } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, FlatList, ScrollView, Alert } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
-import {ref, onValue, get} from "firebase/database";
+import {ref, onValue, get, set} from "firebase/database";
 import {db} from "../../../firebaseConfig"
-import { set } from 'react-native-reanimated';
+
 import FormListItem from '../../../componenets/AdminComponents/FormListItem';
+import { DrawerToggleButton } from '@react-navigation/drawer';
 
 
 const SurveyFormsScreen = ({navigation}) => {
@@ -36,10 +37,16 @@ const SurveyFormsScreen = ({navigation}) => {
     
 
     
-    //delete survey from DB
-    const deleteSurvey = (surveys) => {
 
-    } 
+
+    const saveChanges = () => {
+      const prodRef = ref(db,'surveysProd/')
+      set(prodRef, surveys).then(()=> {
+        Alert.alert("Changes Saved to Production")
+      }).catch((error)=> {
+        Alert.alert("Could NOT save changes to production ")
+      })
+    }
     
     const surveyKey = Object.keys(surveys)
   return (
@@ -53,13 +60,14 @@ const SurveyFormsScreen = ({navigation}) => {
         key={key}
         id={key}
         surveyItem={surveys[key]}
+        reference='surveys'
         />
       ))
       ) : (<Text>No Surveys</Text>)}
       </View>
     </ScrollView>
     
-    <TouchableOpacity style={styles.saveButtonContainer}>
+    <TouchableOpacity style={styles.saveButtonContainer} onPress={saveChanges}>
       <Text style={styles.saveButtonText}>Save Changes</Text>
     </TouchableOpacity>
     
