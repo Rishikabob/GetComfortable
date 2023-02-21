@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTogglePasswordVisibility } from '../../../hooks/useTogglePasswordVisibility';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
-import {ref, set, push} from "firebase/database"
+import {ref, set, push, update} from "firebase/database"
 import {db, auth} from "../../../firebaseConfig"
 import {getAuth} from "firebase/auth"
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -88,6 +88,10 @@ const AddUserModal = () => {
       email: email,
       name: name,
       accountType: accountType}).then(() => alert("Account Created")).catch((error) => alert("Error while creating account. Please make sure you are connected to a network."))
+
+    //add email to public view list 
+    const userListRef = update(ref(db, accountType), email)
+    
   }
 
   return (

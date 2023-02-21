@@ -26,7 +26,12 @@ import SplashScreen from './screens/SplashScreen';
 import UserModal from './screens/Settings/UserSettings';
 import UserModalTEST from './componenets/UserModalTEST';
 import AddUserModal from './screens/AdminScreens/AdminPortalScreens/AddUserModal';
+import ChannelScreen from './screens/chatScreens/ChannelScreen';
 import AddChatScreen from './screens/MessageScreens/AddChatScreen';
+import { AppProvider } from './AppContext';
+import {
+  OverlayProvider
+} from 'stream-chat-expo'; 
 //Root Stack
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +61,11 @@ export default function App() {
   return (
     ///TODO: change default to splash screen, which then checks if user is authenticated or not, then show right stack based on that.
     // Root stack. Contains nested stack of: Login screen ;; Admin Stack ;; User Stack ;; TODO: Add Mentor Stack and splash screen at the top.
+    <AppProvider>
+      <OverlayProvider>
+
+      
+   
     <NavigationContainer>
       <Stack.Navigator screenOptions={{}}>
         <Stack.Screen options={{headerShown: false, animation: 'none'}} name="SplashScreen" component={SplashScreen}/>
@@ -68,6 +78,7 @@ export default function App() {
         <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
           <Stack.Screen options={{title: 'Account Settings'}} name = "User Settings"  component={UserModal} />
         </Stack.Group>
+        
 
         
         {/* <Stack.Screen options={{
@@ -78,6 +89,8 @@ export default function App() {
     }}  name = "ManageUsersNav" component={ManageUsersNavigator}/> */}
       </Stack.Navigator>
     </NavigationContainer>
+    </OverlayProvider>
+    </AppProvider>
     
   );
 }

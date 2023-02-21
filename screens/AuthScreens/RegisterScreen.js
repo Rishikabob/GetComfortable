@@ -9,6 +9,8 @@ import {db, auth} from "../../firebaseConfig"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword,} from 'firebase/auth';
 import { ref, get, set } from 'firebase/database';
 import { async } from '@firebase/util';
+import { chatApiKey} from '../../chat_config/chatConfig';
+
 
 
 const RegisterScreen = (navigation) => {
@@ -101,8 +103,12 @@ const RegisterScreen = (navigation) => {
                         console.log(user.email);
                         //TODO delete the node where this email is in the invitedUsers list after log in but before redirect. 
                         
+
+
                         //then add user to user node in db.
-                        writeData(user.uid,name,email,accountType)
+
+                        
+                        writeData(user.uid,name,email,accountType, chatToken)
                         
                         //direct user to correct stack
                         //TODO: mentor and user are undefined for now. 
@@ -113,6 +119,9 @@ const RegisterScreen = (navigation) => {
                         // } else if (user && accountType === 'admin') {
                         //     navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
                         // }
+
+                        
+
                         setTimeout(() => {
                             setIsLoading(false)
                         },2600)

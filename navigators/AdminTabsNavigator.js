@@ -7,6 +7,7 @@ import ADMResourcesScreen from '../screens/AdminScreens/ADMResourcesScreen'
 import ADMMessageScreen from '../screens/AdminScreens/ADMMessageScreen'
 import AdminHome from '../screens/AdminScreens/AdminHome';
 import { Ionicons } from '@expo/vector-icons';
+import ChannelScreen from '../screens/chatScreens/ChannelScreen';
 
 
 
@@ -33,6 +34,7 @@ const AdminTabsNavigator = () => {
     },
   })}>
       <AdminTabs.Screen options={{headerShown: false, title: "Home", tabBarButton: () => null,}} name="AdminHome" component={AdminHome} />
+      <AdminTabs.Screen options={{headerShown: true, tabBarButton: () => null,}}name="ChannelScreen"  component={ChannelScreen} />
       <AdminTabs.Screen options={{headerShown: false, title: "Surveys",  tabBarIcon: ({focused}) => (
         <View 
         backgroundColor={focused ? '#003C39' : '#00645F'} style={styles.tabContainer}>

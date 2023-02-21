@@ -6,33 +6,46 @@ import CustomListItem from '../../componenets/CustomListItem';
 import { Feather } from '@expo/vector-icons'; 
 import AddChatScreen from '../MessageScreens/AddChatScreen';
 import { useNavigation } from '@react-navigation/core';
+import { async } from '@firebase/util';
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword,} from 'firebase/auth';
+import {db, auth} from "../../firebaseConfig"
+import { ref, get, set, onValue, update } from 'firebase/database';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import {Chat, ChannelList} from 'stream-chat-expo'; // Or stream-chat-expo
+import { chatApiKey, chatUserId } from '../../chat_config/chatConfig';
+import { useAppContext } from '../../AppContext';
+const ChannelScreen = props => {
+  return null;
+}
 
+const ADMMessageScreen = (props) => {
+  // const { setChannel } = useAppContext();
 
+  // const filters = {
+  //   members: {
+  //     '$in': [chatUserId]
+  //   },
+  // };
+  // const sort = {
+  //   last_message_at: -1,
+  // };
 
-
-const ADMMessageScreen = () => {
-  const navigation = useNavigation()
-  return (
-    <View style={styles.container}>
-      <View style={styles.statusBar}/>
-      <AdminTopBar/>
-      <View style={styles.newChatContainer}>
-        <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate(AddChatScreen)}>
-          <Feather name="edit" size={26} color="black" />
-          </TouchableOpacity>
-          
-        </View>
-        
-      </View>
-      <SafeAreaView>
-        <ScrollView>
-          <CustomListItem/>
-        </ScrollView>
-      </SafeAreaView>
-        
-    </View>
-  )
+  // return (
+  //   <View style={styles.container}>
+  //     <View style={styles.statusBar}/>
+  //     <AdminTopBar/>
+  //     <ChannelList
+  //     onSelect={(channel) => {
+  //       const { navigation } = props;
+  //       setChannel(channel);
+  //       navigation.navigate('ChannelScreen');
+  //     }}
+  //     filters={filters}
+  //     sort={sort}
+  //   />
+  //   </View>
+  // )
 }
 
 export default ADMMessageScreen

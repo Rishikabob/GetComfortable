@@ -8,11 +8,25 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import ManageUsersNavigator from './drawerStacks/ManageUsersNavigator'
 import ManageFormsNavigator from './drawerStacks/ManageFormsNavigator'
+import {Chat} from 'stream-chat-expo'; // Or stream-chat-expo
+import { chatApiKey } from '../chat_config/chatConfig';
+import { StreamChat } from 'stream-chat';
+import { useChatClient } from '../chat_config/useChatClient';
+
+
 
 
 const AdminDrawerNavigator = () => {
+  const chatClient = StreamChat.getInstance(chatApiKey);
     const AdminDrawer = createDrawerNavigator()
+    const { clientIsReady } = useChatClient();
+
+  if (!clientIsReady) {
+    return <Text>Loading chat ...</Text>
+  }
   return (
+    
+    <Chat client={chatClient}>
     <AdminDrawer.Navigator drawerContent={props => <DrawerView {...props}/>} screenOptions={() => ({
       drawerActiveBackgroundColor: '#00645F',
       drawerActiveTintColor:'#FFFFFF',
@@ -78,7 +92,8 @@ const AdminDrawerNavigator = () => {
       headerTintColor: '#00645F',
     }}name ="ManageReportsScreens" component={ManageUsersNavigator}/>   
       
-    </AdminDrawer.Navigator> 
+    </AdminDrawer.Navigator>
+    </Chat> 
   )
 }
 function DrawerView(props) {
