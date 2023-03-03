@@ -1,15 +1,42 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView } from 'react-native'
-import React, { useEffect, useState } from 'react';
-import { Ionicons } from '@expo/vector-icons'; 
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-//import * as Linking from 'expo-linking';
+ import { StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView } from 'react-native'
+ import React, { useEffect, useState } from 'react';
+ import { Ionicons } from '@expo/vector-icons'; 
+ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+ import * as Linking from 'expo-linking';
 //import {ref, set, push} from "firebase/database"
 //import {db} from "../../../firebaseConfig"
+//import { firebase } from '../config'
+
+ //import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+
+// function ResetPassword() {
+
+//   const [email, setEmail] = useState('')
+//   const auth = getAuth();
+
+//   const triggerResetEmail = async () => {
+//     await sendPasswordResetEmail(auth, email);
+//     console.log("Password reset email sent")
+//   }
+ 
+//   return (
+//     <div className="resetPassword-main">
+//       // Input field for email
+//       <button className="resetBtn" type="button" onClick={triggerResetEmail}>Ripristina password</button>
+
+//     </div>
+//   )
+// }
+
+// export default ResetPassword;
+
+
+
 
 const ForgotPassScreen = () => {
 
   const [email,setEmail] = useState('Enter email address')
-
+  //firebase.auth().sendPasswordResetEmail(firebase.auth().currentUser.email)
   return (
     <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.innerContainer}>
