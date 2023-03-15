@@ -6,10 +6,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTogglePasswordVisibility } from '../../hooks/useTogglePasswordVisibility';
 import {db, auth} from "../../firebaseConfig"
 
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword,} from 'firebase/auth';
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
 import { ref, get, set } from 'firebase/database';
 import { async } from '@firebase/util';
 import { chatApiKey} from '../../chat_config/chatConfig';
+import { StreamChat } from 'stream-chat';
 
 
 
@@ -108,7 +109,7 @@ const RegisterScreen = (navigation) => {
                         //then add user to user node in db.
 
                         
-                        writeData(user.uid,name,email,accountType, chatToken)
+                        writeData(user.uid,name,email,accountType)
                         
                         //direct user to correct stack
                         //TODO: mentor and user are undefined for now. 
@@ -119,7 +120,8 @@ const RegisterScreen = (navigation) => {
                         // } else if (user && accountType === 'admin') {
                         //     navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
                         // }
-
+                        updateProfile(user, {displayName: name})
+                        
                         
 
                         setTimeout(() => {

@@ -8,25 +8,20 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import ManageUsersNavigator from './drawerStacks/ManageUsersNavigator'
 import ManageFormsNavigator from './drawerStacks/ManageFormsNavigator'
-import {Chat} from 'stream-chat-expo'; // Or stream-chat-expo
-import { chatApiKey } from '../chat_config/chatConfig';
-import { StreamChat } from 'stream-chat';
-import { useChatClient } from '../chat_config/useChatClient';
+import ManageCalendarNavigator from './drawerStacks/ManageCalendarNavigator'
 
 
 
 
 const AdminDrawerNavigator = () => {
-  const chatClient = StreamChat.getInstance(chatApiKey);
+ 
     const AdminDrawer = createDrawerNavigator()
-    const { clientIsReady } = useChatClient();
+    
 
-  if (!clientIsReady) {
-    return <Text>Loading chat ...</Text>
-  }
+  
   return (
     
-    <Chat client={chatClient}>
+   
     <AdminDrawer.Navigator drawerContent={props => <DrawerView {...props}/>} screenOptions={() => ({
       drawerActiveBackgroundColor: '#00645F',
       drawerActiveTintColor:'#FFFFFF',
@@ -81,7 +76,7 @@ const AdminDrawerNavigator = () => {
       headerTitleAlign: 'center',
       title: 'Calendars',
       headerTintColor: '#00645F',
-    }}name ="UpdateCalendarScreens" component={ManageUsersNavigator}/>  
+    }}name ="UpdateCalendarScreens" component={ManageCalendarNavigator}/>  
     <AdminDrawer.Screen options={{
       drawerIcon: ({color}) => (
         <Ionicons name="newspaper-outline" size={22} color={color} />
@@ -93,7 +88,7 @@ const AdminDrawerNavigator = () => {
     }}name ="ManageReportsScreens" component={ManageUsersNavigator}/>   
       
     </AdminDrawer.Navigator>
-    </Chat> 
+    
   )
 }
 function DrawerView(props) {

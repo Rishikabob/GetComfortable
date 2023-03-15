@@ -87,10 +87,12 @@ const AddUserModal = () => {
     push(dbRef, {
       email: email,
       name: name,
-      accountType: accountType}).then(() => alert("Account Created")).catch((error) => alert("Error while creating account. Please make sure you are connected to a network."))
+      accountType: accountType})
+      .then(() => alert("Account Created With: " + "\n Name: " + name + "\n Email: " + email + "\n Account Type: " + accountType))
+      .catch((error) => alert("Error while creating account. Please make sure you are connected to a network."))
 
     //add email to public view list 
-    const userListRef = update(ref(db, accountType), email)
+    //const userListRef = update(ref(db, accountType), email)
     
   }
 

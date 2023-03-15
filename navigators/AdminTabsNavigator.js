@@ -6,14 +6,26 @@ import ADMSurveyScreen from '../screens/AdminScreens/ADMSurveyScreen'
 import ADMResourcesScreen from '../screens/AdminScreens/ADMResourcesScreen'
 import ADMMessageScreen from '../screens/AdminScreens/ADMMessageScreen'
 import AdminHome from '../screens/AdminScreens/AdminHome';
+import NewChatModal from '../screens/chatScreens/NewChatModal'
 import { Ionicons } from '@expo/vector-icons';
 import ChannelScreen from '../screens/chatScreens/ChannelScreen';
+import {Chat} from 'stream-chat-expo'; // Or stream-chat-expo
+import { chatApiKey } from '../chat_config/chatConfig';
+import { StreamChat } from 'stream-chat';
+import { useChatClient } from '../chat_config/useChatClient';
+import ChatNavigation from './ChatNavigation';
 
 
 
 const AdminTabsNavigator = () => {
   const AdminTabs = createBottomTabNavigator();
+  const chatClient = StreamChat.getInstance(chatApiKey);
+  const { clientIsReady } = useChatClient();
+  if (!clientIsReady) {
+    return <Text>Loading chat ...</Text>
+  }
   return (
+    <Chat client={chatClient}>
     <AdminTabs.Navigator 
     screenOptions={() => ({
       headerShown: false,
@@ -42,7 +54,8 @@ const AdminTabsNavigator = () => {
           </Text>
         </View>
       ),}}   name="AdminHome" component={AdminHome} />
-      <AdminTabs.Screen options={{headerShown: true, tabBarButton: () => null,}}name="ChannelScreen"  component={ChannelScreen} />
+      
+
       <AdminTabs.Screen options={{headerShown: false, title: "Surveys",  tabBarIcon: ({focused}) => (
         <View 
         backgroundColor={focused ? '#003C39' : '#00645F'} style={styles.tabContainer}>
@@ -78,11 +91,12 @@ const AdminTabsNavigator = () => {
             Messages
           </Text>
         </View>
-      ),}}   name="AdminMessages" component={ADMMessageScreen} />
+      ),}}   name="AdminMessagesStack" component={ChatNavigation} />
       
       
       
     </AdminTabs.Navigator>
+    </Chat> 
   );
 }
 

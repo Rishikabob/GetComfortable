@@ -1,11 +1,27 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useLayoutEffect }from 'react'
 import { Channel,MessageList,MessageInput } from 'stream-chat-expo'
 import { useAppContext } from '../../AppContext'
+import { HeaderBackButton } from '@react-navigation/elements';
+
+
+
 
 const ChannelScreen = (props) => {
-    const { navigation } = props;
-    const { channel } = useAppContext();
+  const { channel } = useAppContext();
+  const { navigation } = props;
+  useLayoutEffect (() => {
+    navigation.setOptions({
+        title: channel?.data?.name || "Channel",
+        tabBarStyle: {display: 'none'},
+        headerLeft: () => <HeaderBackButton onPress={()=>{navigation.goBack()}
+      }
+        />
+        
+    });
+}, [channel?.data?.name])
+    
+    
   return (
     <View style={styles.container}>
     <Channel channel={channel}>
@@ -20,7 +36,5 @@ const ChannelScreen = (props) => {
 export default ChannelScreen
 
 const styles = StyleSheet.create({
-    container: {
-        marginBottom: 100
-    }
+   
 })

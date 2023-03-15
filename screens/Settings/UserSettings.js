@@ -5,12 +5,19 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import SettingItems from '../../componenets/SettingItems';
 import { auth } from '../../firebaseConfig';
+import { StreamChat } from 'stream-chat';
+import { chatApiKey} from '../../chat_config/chatConfig'
+
 
 
 const UserSettings = () => {
   const navigation = useNavigation()
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    const chatClient = StreamChat.getInstance(chatApiKey);
+
+      await chatClient.disconnectUser();
+
       auth.signOut()
       .then(() => {
         navigation.pop(2)
