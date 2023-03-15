@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StatusBar, StyleSheet, Text, TouchableOpacity, View,  } from 'react-native'
 import React from 'react'
 import { auth } from '../../firebaseConfig'
 import { useNavigation } from '@react-navigation/core';
@@ -21,7 +21,7 @@ const AdminHome = () => {
             Admin Home
         </Text>
         <Text style={styles.subHeaderText}>
-            Email: {auth.currentUser?.email}
+            Welcome {auth.currentUser?.displayName}
       </Text>
       </View>
       <AdminCalendar/>
@@ -57,6 +57,8 @@ const styles = StyleSheet.create({
       height: Constants.statusBarHeight
     },
     headerContainer: {
+      paddingLeft: 30,
+      alignSelf: 'flex-start',
       marginVertical: 15,
     },
     headerText: {
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
       fontWeight: '700',
     },
     subHeaderText: {
-      fontSize: 34,
+      fontSize: 22,
       fontWeight: '700',
     },
     calenderContainer: {

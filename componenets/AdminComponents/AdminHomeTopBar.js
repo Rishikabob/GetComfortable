@@ -13,7 +13,7 @@ const AdminHomeTopBar = () => {
         <View style={styles.iconsLeftContainer}>
         <TouchableOpacity onPress={() => 
         navigation.openDrawer()}>
-            <Ionicons name="ios-menu" size={37} color="#00645F"/>
+            <Ionicons name="menu-sharp" size={25} color="#00645F"/>
         </TouchableOpacity>
         </View>
         <View style={styles.iconsRightContainer}>

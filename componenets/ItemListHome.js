@@ -4,11 +4,23 @@ import {
   import React from 'react'
   import {} from 'react-native-gesture-handler'
   import { Ionicons } from '@expo/vector-icons';
+  import { useNavigation } from '@react-navigation/core';
+
   
   
   const ItemListHome = ({surveyItem: {title, subTitle, icon, link}, id}) => {
+    const navigation = useNavigation()
+
     return (
-      <TouchableOpacity style={styles.formItem} delayPressIn={5} delayPressOut={5} delayLongPress={5}>
+      <TouchableOpacity style={styles.formItem} delayPressIn={5} delayPressOut={5} delayLongPress={5}
+      onPress={() => {
+        /* 1. Navigate to the webView route with params */
+        navigation.navigate('WebView', {
+          title: title,
+          link: link
+        });
+      }}
+      >
         <Ionicons name={icon} size={40} color="black" />
         <View style={styles.textContainer}>
           <Text style={styles.titleText}>{title}</Text>
