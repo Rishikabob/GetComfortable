@@ -1,40 +1,54 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
-import React , {useEffect} from 'react'
+import React , {useEffect, useRef, useState} from 'react'
 
 import { onAuthStateChanged } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/core';
-import { ref, get } from 'firebase/database';
+import { ref, get, set, update } from 'firebase/database';
 import {db, auth} from "../firebaseConfig"
 
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { setupNotifications } from '../hooks/setupNotifications';
 
-const SplashScreen = () => {
+
+
+
+
+const SplashScreen = (props) => {
+  const [expoPushToken, setExpoPushToken] = useState('');
+
+  
   //0 second delay
   const timeout = 0
   const navigation = useNavigation()
   //logic to determine user type and redirect user goes here.
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
+      
       //TODO: change to redirect based on user type in future also need to change login screen section if this is changed. 
-        if (user)
-            setTimeout (() => {
-              console.log(user.uid)
-                    const dbRef = ref(db, 'users/' + user.uid)
-                    get(dbRef).then(snapshot => {
-                        const snapshotData = snapshot.val()
-                        if (snapshotData.accountType === "admin") {
-                            navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
-                            
-                        }
-                        else if (snapshotData.accountType === "mentor") {
-                            navigation.replace("MentorHomeScreens", {screen: "MentorHome"})
-                            
-                        }
-                        else if (snapshotData.accountType === "user") {
-                            navigation.replace("UserHomeScreens", {screen: "UserHome"})
-                            
-                    }
-                })
-            }, timeout);
+        if (user){
+          //register device to user
+            setupNotifications().then(token => {
+            setExpoPushToken(token)
+            console.log("SPLASH TOKEN "+token)
+            //set token in user's node
+            const dbRef = ref(db, "users/" + user.uid);
+            //set token in user's node
+            update(dbRef,{token: token})
+            get(dbRef).then((snapshot) => {
+              const snapshotData = snapshot.val();
+              if (snapshotData.accountType === "admin") {
+                navigation.replace("AdminHomeScreens", { screen: "AdminHome" });
+              } else if (snapshotData.accountType === "mentor") {
+                navigation.replace("MentorHomeScreens", {
+                  screen: "MentorHome",
+                });
+              } else if (snapshotData.accountType === "user") {
+                navigation.replace("UserHomeScreens", { screen: "UserHome" });
+              }
+            });
+          });
+        }
         else {
           setTimeout (() => {
             navigation.replace("AuthScreens", {screen: "Login"})

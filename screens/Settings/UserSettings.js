@@ -7,6 +7,9 @@ import SettingItems from '../../componenets/SettingItems';
 import { auth } from '../../firebaseConfig';
 import { StreamChat } from 'stream-chat';
 import { chatApiKey} from '../../chat_config/chatConfig'
+import { getAuth } from 'firebase/auth';
+import { ref, update } from 'firebase/database';
+import { db } from '../../firebaseConfig';
 
 
 
@@ -17,6 +20,11 @@ const UserSettings = () => {
     const chatClient = StreamChat.getInstance(chatApiKey);
 
       await chatClient.disconnectUser();
+      //unlink notif token from user
+      const auth = getAuth()
+      const user = auth.currentUser
+      const dbRef = ref(db, "users/" + user.uid);
+      update(dbRef,{token: ''})
 
       auth.signOut()
       .then(() => {

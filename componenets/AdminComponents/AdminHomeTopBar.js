@@ -17,7 +17,8 @@ const AdminHomeTopBar = () => {
         </TouchableOpacity>
         </View>
         <View style={styles.iconsRightContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity
+        onPress={() => navigation.navigate('Notifications')}>
             <Ionicons name="notifications" size={37} color="#00645F"/>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => 

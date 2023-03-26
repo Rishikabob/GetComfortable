@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -31,6 +32,12 @@ import ChannelScreen from './screens/chatScreens/ChannelScreen';
 import AddChatScreen from './screens/MessageScreens/AddChatScreen';
 import { AppProvider } from './AppContext';
 import WebViewScreen from './screens/WebViewScreen';
+import registerNNPushToken from 'native-notify';
+import NotificationView from './screens/NotificationScreens/NotificationView';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+
+
 import {
   OverlayProvider
 } from 'stream-chat-expo'; 
@@ -53,13 +60,41 @@ const Stack = createNativeStackNavigator();
 
 
 //APP LAYER...
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 
 export default function App() {
 
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   const [fontsLoaded] = useFonts({
     'Montserrat' : require('./assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf')
   })
+
+  useEffect(() => {
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
   return (
     ///TODO: change default to splash screen, which then checks if user is authenticated or not, then show right stack based on that.
     // Root stack. Contains nested stack of: Login screen ;; Admin Stack ;; User Stack ;; TODO: Add Mentor Stack and splash screen at the top.
@@ -70,8 +105,8 @@ export default function App() {
    
     <NavigationContainer>
       <Stack.Navigator screenOptions={{}}>
-        <Stack.Screen options={{headerShown: false, animation: 'none'}} name="SplashScreen" component={SplashScreen}/>
-        <Stack.Screen options={{headerShown: false}} name="AuthScreens" component={AuthNavigator} />
+        <Stack.Screen options={{headerShown: false, animation: 'none'}} name="SplashScreen" component={SplashScreen} initialParams={{ expoPushToken }}/>
+        <Stack.Screen options={{headerShown: false}} name="AuthScreens" component={AuthNavigator}  initialParams={{ expoPushToken }}/>
         <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="AdminHomeScreens" component={AdminDrawerNavigator} />
         <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="UserHomeScreens" component={UserTabsNavigator} />
         
@@ -79,6 +114,9 @@ export default function App() {
         
         <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
           <Stack.Screen options={{title: 'Account Settings'}} name = "User Settings"  component={UserModal} />
+        </Stack.Group>
+        <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
+          <Stack.Screen options={{title: 'Notifications'}} name = "Notifications"  component={NotificationView} />
         </Stack.Group>
 
         <Stack.Screen options = {{headerShown:true, headerBackButtonMenuEnabled: true,headerTintColor: '#00645F' }} name = "WebView"  component={WebViewScreen} />

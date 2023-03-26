@@ -7,17 +7,24 @@ import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/core';
 import { useHeaderHeight } from '@react-navigation/elements'
 import Constants from 'expo-constants';
-import { ref, get } from 'firebase/database';
+import { ref, get, update } from 'firebase/database';
 import {db, auth} from "../../firebaseConfig"
+import { registerIndieID } from 'native-notify';
+import axios from 'axios';
+import registerNNPushToken from 'native-notify';
+import { setupNotifications } from '../../hooks/setupNotifications';
+
 
   
 //TODO
 // Find a way to make password entry more secure.
 
-const LoginScreen = () => {
+const LoginScreen = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const { expoPushToken } = props.route.params;
+
 
     const height = useHeaderHeight()
     // eye button for password entry
@@ -31,30 +38,40 @@ const LoginScreen = () => {
     //unsubscribe is used to stop listener.
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, user => {
+            
+            
             //logic to determine user type and redirect user goes here.
             setTimeout(() => {
                 if (user) {
-                
-                    console.log(user.uid)
-                    const dbRef = ref(db, 'users/' + user.uid)
-                    get(dbRef).then(snapshot => {
-                        const snapshotData = snapshot.val()
-                        if (snapshotData.accountType === "admin") {
-                            navigation.replace("AdminHomeScreens", {screen: "AdminHome"})
-                            setIsLoading(false)
-                        }
-                        else if (snapshotData.accountType === "mentor") {
-                            navigation.replace("MentorHomeScreens", {screen: "MentorHome"})
-                            setIsLoading(false)
-                        }
-                        else if (snapshotData.accountType === "user") {
-                            navigation.replace("UserHomeScreens", {screen: "UserHome"})
-                            setIsLoading(false)
-                    }
-                })
-                
-                
-            }
+   
+                    setupNotifications().then(token => {
+                        console.log("Login TOKEN "+token)
+                        //set token in user's node
+                        const dbRef = ref(db, "users/" + user.uid);
+                        //set token in user's node
+                        update(dbRef,{token: token})
+                        get(dbRef).then((snapshot) => {
+                          const snapshotData = snapshot.val();
+                          if (snapshotData.accountType === "admin") {
+                            navigation.replace("AdminHomeScreens", {
+                              screen: "AdminHome",
+                            });
+                            setIsLoading(false);
+                          } else if (snapshotData.accountType === "mentor") {
+                            navigation.replace("MentorHomeScreens", {
+                              screen: "MentorHome",
+                            });
+                            setIsLoading(false);
+                          } else if (snapshotData.accountType === "user") {
+                            navigation.replace("UserHomeScreens", {
+                              screen: "UserHome",
+                            });
+                            setIsLoading(false);
+                          }
+                        });
+                    })
+
+                }
             }, 2500)
             
         })

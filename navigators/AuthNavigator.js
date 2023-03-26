@@ -8,10 +8,11 @@ import RegisterScreen from '../screens/AuthScreens/RegisterScreen'
 
 const Stack = createNativeStackNavigator()
 
-function AuthNavigator() {
+function AuthNavigator(props) {
+    const{expoPushToken} = props
     return (
         <Stack.Navigator>
-            <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
+            <Stack.Screen options={{headerShown: false}} name="Login" initialParams={{ expoPushToken }} component={LoginScreen} />
             <Stack.Screen options={{
       headerShown: true,
       headerTitleAlign: 'center',

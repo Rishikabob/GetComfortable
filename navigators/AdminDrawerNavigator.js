@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/core';
 import ManageUsersNavigator from './drawerStacks/ManageUsersNavigator'
 import ManageFormsNavigator from './drawerStacks/ManageFormsNavigator'
 import ManageCalendarNavigator from './drawerStacks/ManageCalendarNavigator'
+import ManageNotificationsNavigator from './drawerStacks/ManageNotificationsNavigator'
 
 
 
@@ -49,7 +50,7 @@ const AdminDrawerNavigator = () => {
       headerTitleAlign: 'center',
       title: 'Notifications',
       headerTintColor: '#00645F',
-    }}name ="CreateNewNotifScreens" component={ManageUsersNavigator}/> 
+    }}name ="CreateNewNotifScreens" component={ManageNotificationsNavigator}/> 
     <AdminDrawer.Screen options={{
       drawerIcon: ({color}) => (
         <Ionicons name="person-outline" size={22} color={color} />
@@ -77,15 +78,7 @@ const AdminDrawerNavigator = () => {
       title: 'Calendars',
       headerTintColor: '#00645F',
     }}name ="UpdateCalendarScreens" component={ManageCalendarNavigator}/>  
-    <AdminDrawer.Screen options={{
-      drawerIcon: ({color}) => (
-        <Ionicons name="newspaper-outline" size={22} color={color} />
-      ),
-      headerShown: true,
-      headerTitleAlign: 'center',
-      title: 'Reports',
-      headerTintColor: '#00645F',
-    }}name ="ManageReportsScreens" component={ManageUsersNavigator}/>   
+     
       
     </AdminDrawer.Navigator>
     
