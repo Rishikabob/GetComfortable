@@ -9,9 +9,6 @@ import { useHeaderHeight } from '@react-navigation/elements'
 import Constants from 'expo-constants';
 import { ref, get, update } from 'firebase/database';
 import {db, auth} from "../../firebaseConfig"
-import { registerIndieID } from 'native-notify';
-import axios from 'axios';
-import registerNNPushToken from 'native-notify';
 import { setupNotifications } from '../../hooks/setupNotifications';
 
 

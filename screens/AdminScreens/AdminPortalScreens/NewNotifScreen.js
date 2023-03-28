@@ -14,7 +14,6 @@ import { db } from "../../../firebaseConfig";
 import { get, set, ref, onValue, push } from "firebase/database";
 import { useEffect } from "react";
 import { useState } from "react";
-import axios, { all } from "axios";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { async } from "@firebase/util";
 
