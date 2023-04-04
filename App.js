@@ -32,7 +32,6 @@ import ChannelScreen from './screens/chatScreens/ChannelScreen';
 import AddChatScreen from './screens/MessageScreens/AddChatScreen';
 import { AppProvider } from './AppContext';
 import WebViewScreen from './screens/WebViewScreen';
-import registerNNPushToken from 'native-notify';
 import NotificationView from './screens/NotificationScreens/NotificationView';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';

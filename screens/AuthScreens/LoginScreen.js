@@ -9,9 +9,6 @@ import { useHeaderHeight } from '@react-navigation/elements'
 import Constants from 'expo-constants';
 import { ref, get, update } from 'firebase/database';
 import {db, auth} from "../../firebaseConfig"
-import { registerIndieID } from 'native-notify';
-import axios from 'axios';
-import registerNNPushToken from 'native-notify';
 import { setupNotifications } from '../../hooks/setupNotifications';
 
 
@@ -49,7 +46,9 @@ const LoginScreen = (props) => {
                         //set token in user's node
                         const dbRef = ref(db, "users/" + user.uid);
                         //set token in user's node
-                        update(dbRef,{token: token})
+                        if(token != null) {
+                            update(dbRef,{token: token})
+                        }
                         get(dbRef).then((snapshot) => {
                           const snapshotData = snapshot.val();
                           if (snapshotData.accountType === "admin") {
