@@ -1,35 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import NotifListItem from '../../componenets/NotifListItem';
-import { db } from '../../firebaseConfig';
+import { auth, db } from '../../firebaseConfig';
 import {ref, onValue, get, set, remove} from "firebase/database";
 
 
 const NotificationView = () => {
   const [view, setView] = useState('global');
   const [notifications, setNotifications] = useState([])
+  const [accountType, setAccountType] = useState('')
+  const currentUID = auth.currentUser?.uid
+  console.log(currentUID)
+  userRef = ref(db, 'users/' + currentUID)
+  get(userRef).then((snapshot) => {
+    const snapshotData = snapshot.val();
+    console.log(snapshotData.accountType)
+    setAccountType(snapshotData.accountType)
+  });
 
 
   const handleViewChange = (newView) => {
     setView(newView);
   };
 
-
+  
 
 
   useEffect(() => {
     let dbref = null
     if (view === 'global') {
-      dbref = ref(db,'globalNotifications/')
       console.log('View is global');
+      dbref = ref(db,'globalNotifications/')
       return onValue(dbref, (snapshot) => {
         let data = snapshot.val() || {};
         let notifications = { ...data };
         setNotifications(notifications);
       });
     } else if (view === 'mentor') {
-      dbref = ref(db,'mentorNotifications/')
       console.log('View is mentor');
+      dbref = ref(db,'mentorNotifications/')
       return onValue(dbref, (snapshot) => {
         let data = snapshot.val() || {};
         let notifications = { ...data };
@@ -59,16 +68,18 @@ const NotificationView = () => {
       >
         <Text style={view==='global'? styles.selectedButtonText: styles.buttonText}> Global Notifications </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={view === 'mentor' ? styles.selectedButton: styles.button}
+      {(accountType === 'mentor' || accountType === 'admin') && <TouchableOpacity style={view === 'mentor' ? styles.selectedButton: styles.button}
       onPress={() => handleViewChange('mentor')}
       >
         <Text style={view==='mentor'? styles.selectedButtonText: styles.buttonText}> Mentor Notifications </Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={view === 'user' ? styles.selectedButton: styles.button}
+      </TouchableOpacity>}
+      
+
+      {(accountType === 'user' || accountType === 'admin') && <TouchableOpacity style={view === 'user' ? styles.selectedButton: styles.button}
       onPress={() => handleViewChange('user')}
       >
         <Text style={view==='user'? styles.selectedButtonText: styles.buttonText}> User Notifications </Text>
-      </TouchableOpacity>
+      </TouchableOpacity>}
 
       
     <View style = {styles.notifContainer}>
@@ -119,6 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F2',
     paddingTop: 12,
     borderRadius: 10,
+    maxHeight: 400,
   },
   contentContainerStyle: {
     paddingHorizontal: 20,

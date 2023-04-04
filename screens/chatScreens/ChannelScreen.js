@@ -36,5 +36,9 @@ const ChannelScreen = (props) => {
 export default ChannelScreen
 
 const styles = StyleSheet.create({
+  container: {
+    
+    marginBottom: 40,
+  }
    
 })

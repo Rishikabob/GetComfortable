@@ -2,7 +2,7 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import { View, Text } from 'react-native'
 import React from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import ADMMessageScreen from '../screens/AdminScreens/ADMMessageScreen';
 import ChannelScreen from '../screens/chatScreens/ChannelScreen';
 import NewChatModal from '../screens/chatScreens/NewChatModal';
@@ -27,7 +27,7 @@ const ChatNavigation = ({ navigation, route }) => {
             navigation.setOptions({tabBarStyle: {display: 'none'}});
         }
     }, [navigation, route]);
-    const ChatStack = createNativeStackNavigator()
+    const ChatStack = createStackNavigator()
 
   return (
     <ChatStack.Navigator>

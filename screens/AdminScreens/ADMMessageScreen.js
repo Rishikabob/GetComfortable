@@ -41,6 +41,7 @@ const ADMMessageScreen = (props) => {
   };
 
   return (
+ 
     <View style={styles.container}>
       <View style={styles.statusBar}/>
       <AdminTopBar/>
@@ -56,7 +57,7 @@ const ADMMessageScreen = (props) => {
       </View>
       <ChannelList
       onSelect={(channel) => {
-        
+        console.log("Test")
         setChannel(channel);
         navigation.navigate('ChannelScreen');
       }}
@@ -67,6 +68,7 @@ const ADMMessageScreen = (props) => {
 
       
     </View>
+
   )
 }
 
