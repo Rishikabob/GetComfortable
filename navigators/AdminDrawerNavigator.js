@@ -8,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import ManageUsersNavigator from './drawerStacks/ManageUsersNavigator'
 import ManageFormsNavigator from './drawerStacks/ManageFormsNavigator'
-import ManageCalendarNavigator from './drawerStacks/ManageCalendarNavigator'
+//import ManageCalendarNavigator from './drawerStacks/ManageCalendarNavigator'
 
 
 
@@ -76,7 +76,7 @@ const AdminDrawerNavigator = () => {
       headerTitleAlign: 'center',
       title: 'Calendars',
       headerTintColor: '#00645F',
-    }}name ="UpdateCalendarScreens" component={ManageCalendarNavigator}/>  
+    }}name ="UpdateCalendarScreens" component={ManageUsersNavigator}/>  
     <AdminDrawer.Screen options={{
       drawerIcon: ({color}) => (
         <Ionicons name="newspaper-outline" size={22} color={color} />
