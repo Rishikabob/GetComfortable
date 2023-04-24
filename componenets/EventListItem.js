@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { Pressable } from 'react-native';
 
 const EventListItem = ({eventItem: {dateTime, description, title}, id}) => {
 const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -32,7 +33,7 @@ function formatDate(date) {
 
 
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={()=> {console.log('pressed')}}>
         <View style= {styles.topContainer}>
             <Text style={styles.monthText}>{monthNames[month]}</Text>
             <View style={{...styles.circle, backgroundColor: "#00645F" }} >
@@ -49,7 +50,7 @@ function formatDate(date) {
             <Text>{time}</Text>
         </View>
         
-    </View>
+    </Pressable>
   )
 }
 

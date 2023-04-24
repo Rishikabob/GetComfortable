@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Calendar, CalendarProvider } from "react-native-calendars";
 import EventListItem from "../EventListItem";
 import { ref, onValue, get, set, query, orderByChild, orderByValue } from "firebase/database";
 import { db } from "../../firebaseConfig";
 import { merge } from 'lodash';
+import { Modal } from "react-native";
+import { Pressable } from "react-native";
 
 
 const AdminCalendar = () => {
@@ -19,7 +21,10 @@ const AdminCalendar = () => {
   const [mentorEvents, setMentorEvents] = useState({})
   const [sortedEvents, setSortedEvents] = useState({})
   const [loading, setLoading] = useState(true);
-
+  const [modalVisible, setModalVisible] = useState(true);
+  const [selectedItemName, setSelectedItemName] = useState("Test");
+  const [selectedItemDesc, setSelectedItemDesc] = useState("Test");
+  const [selectedItemDate, setSelectedItemDate] = useState("Test");
 
   //const eventsKey = Object.keys(events);
   //const [eventsKey, setEventsKeys] = useState(Object.keys(events))
@@ -48,7 +53,12 @@ const AdminCalendar = () => {
   }))
   Object.assign(mark, { [date]: { selected: true, marked: false } });
   
-
+function setModalVisibleFunc(dateTime, description, title) {
+    setSelectedItemName(title);
+    setSelectedItemDesc(description);
+    setSelectedItemDate(dateTime);
+    setModalVisible(true);
+  }
 function getShownEvents(events) {
   if (date.length === 0) {
     console.log("Date Empty");
@@ -118,19 +128,65 @@ function getShownEvents(events) {
   
   //fetch and read data from database
   useEffect(() => {
-    const globalEventsRef = ref(db, "globalCalendar/");
-    const mentorEventsRef= ref(db, "mentorCalendar/");
-    const orderedQuery = query(globalEventsRef, orderByChild('dateTime'))
-    return onValue(orderedQuery, (snapshot) => {
-      let data = snapshot.val() || {};
-      let events = { ...data };
-      //console.log(data)
-      setEvents(events);
-      setSortedEvents(sortEvents(events))
+    // const globalEventsRef = ref(db, "globalCalendar/");
+    // const mentorEventsRef= ref(db, "mentorCalendar/");
+    // const userEventsRef = ref(db, "userCalendar/");
+    // const orderedQuery = query(globalEventsRef, orderByChild('dateTime'))
+    // return onValue(orderedQuery, (snapshot) => {
+    //   let data = snapshot.val() || {};
+    //   let events = { ...data };
+    //   //console.log(data)
+    //   setEvents(events);
+    //   setSortedEvents(sortEvents(events))
      
 
-      console.log('events Changed')
+    //   console.log('events Changed')
+    // });
+    const globalEventsRef = ref(db, "globalCalendar/");
+  const mentorEventsRef = ref(db, "mentorCalendar/");
+  const userEventsRef = ref(db, "userCalendar/");
+
+  const orderedQueryGlobal = query(globalEventsRef, orderByChild("dateTime"));
+  const orderedQueryMentor = query(mentorEventsRef, orderByChild("dateTime"));
+  const orderedQueryUser = query(userEventsRef, orderByChild("dateTime"));
+
+  let events = {};
+
+  const globalPromise = new Promise((resolve) => {
+    onValue(orderedQueryGlobal, (snapshot) => {
+      const data = snapshot.val() || {};
+      events = { ...events, ...data };
+      setEvents(events);
+      setSortedEvents(sortEvents(events));
+      resolve();
     });
+  });
+
+  const mentorPromise = new Promise((resolve) => {
+    onValue(orderedQueryMentor, (snapshot) => {
+      const data = snapshot.val() || {};
+      events = { ...events, ...data };
+      setEvents (events);
+      setSortedEvents(sortEvents(events));
+      resolve();
+    });
+  });
+
+  const userPromise = new Promise((resolve) => {
+    onValue(orderedQueryUser, (snapshot) => {
+      const data = snapshot.val() || {};
+      events = { ...events, ...data };
+      setEvents(events);
+      setSortedEvents(sortEvents(events));
+      resolve();
+    });
+  });
+
+    setEvents(events);
+    setSortedEvents(sortEvents(events));
+    console.log("events Changed");
+
+    
   }, []);
 
 
@@ -177,6 +233,30 @@ function getShownEvents(events) {
 
   return (
     <View style={styles.container}>
+      <Modal
+      visible={modalVisible}
+      animationType="none"
+      transparent={true}
+       onRequestClose={() => setModalVisible(false)}
+      
+      >
+        <View style={styles.modalContainer}>
+          
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>{selectedItemName}</Text>
+            </View>
+            <View style={styles.modalBody}>
+              <Text style={styles.modalText}>Date: {selectedItemDate}</Text>
+              <Text style={styles.modalText}>Description: {selectedItemDesc}</Text>
+            </View>
+            <Pressable style={styles.closeButton} onPress={() => setModalVisible(false)}>
+            <Text style={styles.closeButtonText}>Close</Text>
+          </Pressable>
+            </View>
+            </View>
+
+      </Modal>
       <View style={styles.calenderContainer}>
         <Calendar
           hideExtraDays={true}
@@ -319,10 +399,37 @@ const styles = StyleSheet.create({
   },
   scrollViewContaienr: {
     backgroundColor: "white",
-    maxHeight: 220,
+    maxHeight: Dimensions.get("window").height * 0.23,
     borderRadius: 10,
   },
   contentContainerStyle: {
     padding: 5,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 16,
+    minWidth: 300,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  closeButton: {
+    backgroundColor: "#ccc",
+    borderRadius: 5,
+    padding: 8,
+    marginTop: 30,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    fontWeight: "bold",},
+    
 });

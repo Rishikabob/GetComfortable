@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+
 import { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -101,9 +102,9 @@ export default function App() {
       <OverlayProvider>
 
       
-   
     <NavigationContainer>
-    
+    <StatusBar style="dark" />
+
       <Stack.Navigator screenOptions={{}}>
         <Stack.Screen options={{headerShown: false, animation: 'none'}} name="SplashScreen" component={SplashScreen} initialParams={{ expoPushToken }}/>
         <Stack.Screen options={{headerShown: false}} name="AuthScreens" component={AuthNavigator}  initialParams={{ expoPushToken }}/>

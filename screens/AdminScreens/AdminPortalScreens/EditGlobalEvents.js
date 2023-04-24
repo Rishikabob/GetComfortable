@@ -109,10 +109,10 @@ const EditGlobalEvents = ({route, navigation}) => {
     <View style= {styles.pickerContainer}>
 
     <View style={styles.pickerButtonContainer}>
-      <Button color="white" onPress={showDatepicker} title="Show date picker" />
+      <Button color="gray" onPress={showDatepicker} title="Show date picker" />
     </View>
     <View style={styles.pickerButtonContainer}>
-      <Button color="white" onPress={showTimepicker} title="Show time picker" />
+      <Button color="gray" onPress={showTimepicker} title="Show time picker" />
     </View>
     
     {show && (

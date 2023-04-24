@@ -57,9 +57,17 @@ const ADMMessageScreen = (props) => {
       </View>
       <ChannelList
       onSelect={(channel) => {
-        console.log("Test")
+        let members = (channel?.state?.members)
+        let memberName = null
+        Object.keys(members).forEach((userId) => {
+          if (userId !== userID) {
+            memberName = members[userId].user.name;
+          }
+        });
+        
+        console.log(memberName); // "Bob Johnson"
         setChannel(channel);
-        navigation.navigate('ChannelScreen');
+        navigation.navigate('ChannelScreen', {memberName});
       }}
       filters={filters}
       sort={sort}

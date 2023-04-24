@@ -6,9 +6,9 @@ import AdminListItems from '../../../componenets/AdminComponents/AdminListItems'
 const ManageForms = ({navigation}) => {
 
     const formOptions=[
-        {title:'View All Forms', subTitle:'', icon:'clipboard-outline',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("ViewAllForms")}},
+     
         {title:'View/Edit Survey Forms', subTitle:'', icon:'clipboard-outline',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("SurveyForms")}},
-        {title:'View/Edit Resoruces', subTitle:'', icon:'stats-chart',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("ResourcesScreen")}}
+        {title:'View/Edit Resources', subTitle:'', icon:'stats-chart',iconBoxColor:'#00645F', onPress: () => {navigation.navigate("ResourcesScreen")}}
     ];
 
   return (
