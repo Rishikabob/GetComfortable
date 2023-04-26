@@ -39,6 +39,8 @@ import * as Notifications from 'expo-notifications';
 import MentorTabsNavigator from './navigators/MentorTabsNavigator';
 import {OverlayProvider} from 'stream-chat-expo'; 
 import { createStackNavigator } from '@react-navigation/stack';
+import ChangeNameScreen from './screens/Settings/ChangeNameScreen';
+import ChangePasswordScreen from './screens/Settings/ChangePasswordScreen';
 //Root Stack
 const Stack = createStackNavigator();
 
@@ -116,6 +118,9 @@ export default function App() {
         
         <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
           <Stack.Screen options={{title: 'Account Settings'}} name = "User Settings"  component={UserModal} />
+          <Stack.Screen options={{title: 'Change Password'}} name = "ChangePasswordScreen"  component={ChangePasswordScreen} />
+          <Stack.Screen options={{title: 'Change Display Name'}} name = "ChangeNameScreen"  component={ChangeNameScreen} />
+
         </Stack.Group>
         <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
           <Stack.Screen options={{title: 'Notifications'}} name = "Notifications"  component={NotificationView} />

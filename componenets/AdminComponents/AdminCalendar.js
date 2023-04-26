@@ -21,10 +21,12 @@ const AdminCalendar = () => {
   const [mentorEvents, setMentorEvents] = useState({})
   const [sortedEvents, setSortedEvents] = useState({})
   const [loading, setLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const [selectedItemName, setSelectedItemName] = useState("Test");
   const [selectedItemDesc, setSelectedItemDesc] = useState("Test");
   const [selectedItemDate, setSelectedItemDate] = useState("Test");
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
 
   //const eventsKey = Object.keys(events);
   //const [eventsKey, setEventsKeys] = useState(Object.keys(events))
@@ -230,6 +232,26 @@ function getShownEvents(events) {
 
   const eventsKey = (Object.keys(getShownEvents(sortedEvents)));
   //console.log(eventsKey)
+  const handlePress = (event) => {
+    setSelectedItemName(event.title);
+    setSelectedItemDesc(event.description);
+    setSelectedItemDate(formatDate(new Date(event.dateTime)));
+    setModalVisible(true);
+  };
+  function formatDate(date) {
+    let fDate = date.toDateString()
+    let fTime = ''
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    fTime = hours + ':' + minutes + ' ' + ampm;
+    var strTime = fDate +" at "+ fTime
+    return strTime
+
+  }
 
   return (
     <View style={styles.container}>
@@ -247,8 +269,8 @@ function getShownEvents(events) {
               <Text style={styles.modalTitle}>{selectedItemName}</Text>
             </View>
             <View style={styles.modalBody}>
-              <Text style={styles.modalText}>Date: {selectedItemDate}</Text>
-              <Text style={styles.modalText}>Description: {selectedItemDesc}</Text>
+            <Text style={styles.modalTextDesc}>{selectedItemDesc}</Text>
+              <Text style={styles.modalTextDate}>When: {selectedItemDate}</Text>
             </View>
             <Pressable style={styles.closeButton} onPress={() => setModalVisible(false)}>
             <Text style={styles.closeButtonText}>Close</Text>
@@ -338,7 +360,8 @@ function getShownEvents(events) {
             <View>
               {eventsKey.length > 0 ? (
                 eventsKey.map((key) => (
-                  <EventListItem key={key} id={key} eventItem={sortedEvents[key]} />
+                  <EventListItem key={key} id={key} eventItem={sortedEvents[key]} 
+                  onPress={() => handlePress(sortedEvents[key])}/>
                 ))
               ) : (
                 <Text style={styles.noEventsText}>No Events</Text>
@@ -426,10 +449,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     borderRadius: 5,
     padding: 8,
-    marginTop: 30,
+    marginTop: 20,
     alignItems: "center",
   },
   closeButtonText: {
     fontWeight: "bold",},
+
+  modalTextDesc: {
+    fontSize: 18,
+    marginBottom: 30,
+  },
+  modalTextDate: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+
+  modalBody: {
+    marginTop: 10,
+  },
+
+
+
     
 });
