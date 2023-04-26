@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+
 import { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -35,13 +36,13 @@ import WebViewScreen from './screens/WebViewScreen';
 import NotificationView from './screens/NotificationScreens/NotificationView';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-
-
-import {
-  OverlayProvider
-} from 'stream-chat-expo'; 
+import MentorTabsNavigator from './navigators/MentorTabsNavigator';
+import {OverlayProvider} from 'stream-chat-expo'; 
+import { createStackNavigator } from '@react-navigation/stack';
+import ChangeNameScreen from './screens/Settings/ChangeNameScreen';
+import ChangePasswordScreen from './screens/Settings/ChangePasswordScreen';
 //Root Stack
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 
 //define different user flows 
@@ -97,22 +98,29 @@ export default function App() {
   return (
     ///TODO: change default to splash screen, which then checks if user is authenticated or not, then show right stack based on that.
     // Root stack. Contains nested stack of: Login screen ;; Admin Stack ;; User Stack ;; TODO: Add Mentor Stack and splash screen at the top.
+
+
     <AppProvider>
       <OverlayProvider>
 
       
-   
     <NavigationContainer>
+    <StatusBar style="dark" />
+
       <Stack.Navigator screenOptions={{}}>
         <Stack.Screen options={{headerShown: false, animation: 'none'}} name="SplashScreen" component={SplashScreen} initialParams={{ expoPushToken }}/>
         <Stack.Screen options={{headerShown: false}} name="AuthScreens" component={AuthNavigator}  initialParams={{ expoPushToken }}/>
         <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="AdminHomeScreens" component={AdminDrawerNavigator} />
         <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="UserHomeScreens" component={UserTabsNavigator} />
+        <Stack.Screen options={{headerShown: false, headerBackButtonMenuEnabled: false}} name="MentorHomeScreens" component={MentorTabsNavigator} />
         
         <Stack.Screen options={{headerShown: true, headerBackButtonMenuEnabled: false, title: "Add Chat"}} name="AddChatScreen" component={AddChatScreen} />
         
         <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
           <Stack.Screen options={{title: 'Account Settings'}} name = "User Settings"  component={UserModal} />
+          <Stack.Screen options={{title: 'Change Password'}} name = "ChangePasswordScreen"  component={ChangePasswordScreen} />
+          <Stack.Screen options={{title: 'Change Display Name'}} name = "ChangeNameScreen"  component={ChangeNameScreen} />
+
         </Stack.Group>
         <Stack.Group  screenOptions={{ headerShown: true, headerTintColor: '#00645F'}}>
           <Stack.Screen options={{title: 'Notifications'}} name = "Notifications"  component={NotificationView} />
@@ -132,7 +140,9 @@ export default function App() {
     </NavigationContainer>
     </OverlayProvider>
     </AppProvider>
-    
+
+  
+
   );
 }
 // options={{headerTintColor: '#00645F', headerStyle: {backgroundColor:'#BDDFDE'}}}

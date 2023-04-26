@@ -7,12 +7,21 @@ import ADMSurveyScreen from '../screens/AdminScreens/ADMSurveyScreen'
 import ADMResourcesScreen from '../screens/AdminScreens/ADMResourcesScreen'
 import ADMMessageScreen from '../screens/AdminScreens/ADMMessageScreen'
 import UserHome from '../screens/UserScreens/UserHome';
-
+import ChatNavigation from './ChatNavigation';
+import { Chat } from 'stream-chat-expo';
+import { chatApiKey } from '../chat_config/chatConfig';
+import { StreamChat } from 'stream-chat';
+import { useChatClient } from '../chat_config/useChatClient';
 
 const UserTabsNavigator = () => {
     const UserTabs = createBottomTabNavigator();
-
+    const chatClient = StreamChat.getInstance(chatApiKey);
+    const { clientIsReady } = useChatClient();
+    if (!clientIsReady) {
+      return <Text>Loading chat ...</Text>
+    }
   return (
+    <Chat client={chatClient}>
     <UserTabs.Navigator 
     screenOptions={() => ({
       headerShown: false,
@@ -42,33 +51,7 @@ const UserTabsNavigator = () => {
         </View>
       ),}}  name="UserHome" component={UserHome} />
 
-    <UserTabs.Screen options={{headerShown: false, title: "Surveys",  tabBarIcon: ({focused}) => (
-        <View 
-        backgroundColor={focused ? '#003C39' : '#00645F'} style={styles.tabContainer}>
-          <Ionicons name="clipboard" size={30} color="white"/>
-          <Text style={styles.iconText}>
-            Surveys
-          </Text>
-        </View>
-      ),}}  name="UserSurvey" component={ADMSurveyScreen} />
-
-    <UserTabs.Screen options={{headerShown: false, title: "Log Visit",  tabBarIcon: ({focused}) => (
-        <View backgroundColor={focused ? '#003C39' : '#00645F'}style={styles.tabContainer}>
-          <Ionicons name="checkmark-done-circle" size={30} color="white"/>
-          <Text style={styles.iconText}>
-            Log Vist
-          </Text>
-        </View>
-      ),}}   name="UserLogVisit" component={ADMLogVisitScreen} />
-
-    <UserTabs.Screen options={{headerShown: false, title: "Resoruces",  tabBarIcon: ({focused}) => (
-        <View backgroundColor={focused ? '#003C39' : '#00645F'}style={styles.tabContainer}>
-          <Ionicons name="stats-chart" size={30} color="white"/>
-          <Text style={styles.iconText}>
-            Resources
-          </Text>
-        </View>
-      ),}}  name="UserResources" component={ADMResourcesScreen} />
+    
 
     <UserTabs.Screen options={{headerShown: false, title: "Messages",  tabBarIcon: ({focused}) => (
         <View backgroundColor={focused ? '#003C39' : '#00645F'}style={styles.tabContainer}>
@@ -77,12 +60,13 @@ const UserTabsNavigator = () => {
             Messages
           </Text>
         </View>
-      ),}}   name="UserMessages" component={ADMMessageScreen} />
+      ),}}   name="UserMessages" component={ChatNavigation} />
 
 
 
 
   </UserTabs.Navigator>
+  </Chat>
   )
 }
 

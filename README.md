@@ -22,4 +22,101 @@ Get Comfortable is a mobile application that facilitates communication between m
 
 
 
-#Dependencies:
+# Dependencies:
+
+```
+GetComfortable
+├─ App.js
+├─ assets
+│  ├─ adaptive-icon.png
+│  ├─ favicon.png
+│  ├─ icon.png
+│  ├─ images
+│  │  └─ logo_white.png
+│  ├─ splash.png
+│  └─ toggle-drawer-icon.png
+├─ chat_config
+│  ├─ chatConfig.js
+│  └─ useChatClient.js
+├─ componenets
+│  ├─ AdminComponents
+│  │  ├─ AdminCalendar.js
+│  │  ├─ AdminHomeTopBar.js
+│  │  ├─ AdminListItems.js
+│  │  ├─ AdminNotifListItem.js
+│  │  ├─ AdminTopBar.js
+│  │  ├─ DeleteEventModal.js
+│  │  └─ FormListItem.js
+│  ├─ CustomListItem.js
+│  ├─ EventListItem.js
+│  ├─ ItemListHome.js
+│  ├─ NotifListItem.js
+│  ├─ SettingItems.js
+│  ├─ UserModalTEST.js
+│  └─ UserTopBar.js
+├─ config
+├─ firebaseConfig.js
+├─ hooks
+│  ├─ setupNotifications.js
+│  └─ useTogglePasswordVisibility.js
+├─ navigators
+│  ├─ AdminDrawerNavigator.js
+│  ├─ AdminTabsNavigator.js
+│  ├─ AuthNavigator.js
+│  ├─ ChatNavigation.js
+│  ├─ drawerStacks
+│  │  ├─ ManageCalendarNavigator.js
+│  │  ├─ ManageFormsNavigator.js
+│  │  ├─ ManageNotificationsNavigator.js
+│  │  └─ ManageUsersNavigator.js
+│  ├─ MentorTabsNavigator.js
+│  └─ UserTabsNavigator.js
+├─ screens
+│  ├─ AdminScreens
+│  │  ├─ AdminHome.js
+│  │  ├─ AdminPortalScreens
+│  │  │  ├─ AddUserModal.js
+│  │  │  ├─ AllFormsScreen.js
+│  │  │  ├─ EditGlobalEvents.js
+│  │  │  ├─ EditResourcesModal.js
+│  │  │  ├─ EditSurveyModal.js
+│  │  │  ├─ GlobalEvents.js
+│  │  │  ├─ GlobalNotifScreen.js
+│  │  │  ├─ ManageCalendar.js
+│  │  │  ├─ ManageForms.js
+│  │  │  ├─ ManageNotifications.js
+│  │  │  ├─ ManageUsers.js
+│  │  │  ├─ MentorEvents.js
+│  │  │  ├─ MentorNotifScreen.js
+│  │  │  ├─ NewNotifScreen.js
+│  │  │  ├─ Notifications
+│  │  │  ├─ ResourcesScreen.js
+│  │  │  ├─ SurveyFormsScreen.js
+│  │  │  ├─ UserEvents.js
+│  │  │  └─ UserNotifScreen.js
+│  │  ├─ ADMLogVisitScreen.js
+│  │  ├─ ADMMessageScreen.js
+│  │  ├─ ADMResourcesScreen.js
+│  │  └─ ADMSurveyScreen.js
+│  ├─ AuthScreens
+│  │  ├─ ForgotPassScreen.js
+│  │  ├─ LoginScreen.js
+│  │  └─ RegisterScreen.js
+│  ├─ chatScreens
+│  │  ├─ ChannelScreen.js
+│  │  └─ NewChatModal.js
+│  ├─ HomeScreen.js
+│  ├─ MentorScreens
+│  │  └─ MentorHome.js
+│  ├─ MessageScreens
+│  │  └─ AddChatScreen.js
+│  ├─ NotificationScreens
+│  │  └─ NotificationView.js
+│  ├─ Settings
+│  │  └─ UserSettings.js
+│  ├─ SplashScreen.js
+│  ├─ UserScreens
+│  │  └─ UserHome.js
+│  └─ WebViewScreen.js
+
+```

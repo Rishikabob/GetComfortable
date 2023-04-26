@@ -30,11 +30,12 @@ const SplashScreen = (props) => {
           //register device to user
             setupNotifications().then(token => {
             setExpoPushToken(token)
-            console.log("SPLASH TOKEN "+token)
+            console.log("SPLASH TOKEN "+ token)
             //set token in user's node
             const dbRef = ref(db, "users/" + user.uid);
-            //set token in user's node
-            update(dbRef,{token: token})
+            if(token != null) {
+              update(dbRef,{token: token})
+          }
             get(dbRef).then((snapshot) => {
               const snapshotData = snapshot.val();
               if (snapshotData.accountType === "admin") {

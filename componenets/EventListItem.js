@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { Pressable } from 'react-native';
 
-const EventListItem = ({eventItem: {dateTime, description, title}, id}) => {
+const EventListItem = ({eventItem: {dateTime, description, title}, id, onPress}) => {
 const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
@@ -32,7 +33,7 @@ function formatDate(date) {
 
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
         <View style= {styles.topContainer}>
             <Text style={styles.monthText}>{monthNames[month]}</Text>
             <View style={{...styles.circle, backgroundColor: "#00645F" }} >
@@ -49,7 +50,7 @@ function formatDate(date) {
             <Text>{time}</Text>
         </View>
         
-    </View>
+    </TouchableOpacity>
   )
 }
 

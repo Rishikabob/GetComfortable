@@ -70,7 +70,8 @@ const NewChatModal = () => {
               })
               await newChat.watch();
               setChannel(newChat);
-              navigation.replace('ChannelScreen');
+              let name = item.name
+              navigation.replace('ChannelScreen', {name});
             }} style={styles.userItemTouchable} delayPressIn={5} delayPressOut={5} delayLongPress={5} >
               <Text style={styles.nameText}>{item.name}</Text>
               <Text style={styles.emailText}>{item.email}</Text>

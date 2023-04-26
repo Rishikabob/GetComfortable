@@ -13,11 +13,11 @@ const ManageCalendarNavigator = () => {
   return (
     <ManageCalendarStack.Navigator>
         <ManageCalendarStack.Screen options={{headerShown: false}} name = "Manage Calendar" component={ManageCalendar}/>
-        <ManageCalendarStack.Screen options={{headerShown: true, headerTintColor: '#00645F'}} name = "Manage Global Events" component={GlobalEvents}/>
-        <ManageCalendarStack.Screen options={{headerShown: true, headerTintColor: '#00645F'}} name = "Manage Mentor Events" component={MentorEvents}/>
-        <ManageCalendarStack.Screen options={{headerShown: true, headerTintColor: '#00645F'}} name = "Manage User Events" component={UserEvents}/>
+        <ManageCalendarStack.Screen options={{title: 'Global Events', headerShown: true, headerTintColor: '#00645F'}} name = "Manage Global Events" component={GlobalEvents} initialParams={{type: 'globalCalendar'}}/>
+        <ManageCalendarStack.Screen options={{title: 'Mentor Events', headerShown: true, headerTintColor: '#00645F'}} name = "Manage Mentor Events" component={GlobalEvents} initialParams={{type: 'mentorCalendar'}}/>
+        <ManageCalendarStack.Screen options={{title: 'User Events', headerShown: true, headerTintColor: '#00645F'}} name = "Manage User Events" component={GlobalEvents}initialParams={{type: 'userCalendar'}}/>
         <ManageCalendarStack.Group  screenOptions={{ presentation:'modal', headerTintColor: '#00645F'}}>
-          <ManageCalendarStack.Screen options={{title: 'Add Global Event'}} name = "Edit Global Event"  component={EditGlobalEvents} />
+          <ManageCalendarStack.Screen options={{title: 'Add Event'}} name = "Edit Global Event"  component={EditGlobalEvents} />
         </ManageCalendarStack.Group>
     </ManageCalendarStack.Navigator>
   )

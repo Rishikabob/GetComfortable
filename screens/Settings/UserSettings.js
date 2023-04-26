@@ -36,8 +36,8 @@ const UserSettings = () => {
   }
 
     const settingOptions=[
-      {title:'Edit Name', subTitle: null, icon: 'pencil-outline', onPress: () => {}},
-      {title:'Change Password', subTitle: null, icon: 'lock-closed-outline', onPress: () => {}},
+      {title:'Edit Name', subTitle: null, icon: 'pencil-outline', onPress: () => {navigation.navigate('ChangeNameScreen')}},
+      {title:'Change Password', subTitle: null, icon: 'lock-closed-outline', onPress: () => {navigation.navigate('ChangePasswordScreen')}},
       {title:'Sign Out', subTitle: null, icon: 'exit-outline', onPress: handleSignOut},
     ];
 

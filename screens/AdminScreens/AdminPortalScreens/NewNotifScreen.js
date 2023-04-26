@@ -8,6 +8,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Alert,
+  Platform,
 } from "react-native";
 import React from "react";
 import { db } from "../../../firebaseConfig";
@@ -250,7 +251,7 @@ const NewNotifScreen = () => {
               <Button
                 title="Global"
                 onPress={() => setSelectedGroup("global")}
-                color={selectedGroup === "global" ? "white" : "#000"}
+                color={selectedGroup === "global" ? Platform.OS==='android' ? "#0F6E69": 'white' : Platform.OS==='android' ? "gray" : 'black'}
               />
             </View>
             <View
@@ -263,7 +264,7 @@ const NewNotifScreen = () => {
               <Button
                 title="Mentors"
                 onPress={() => setSelectedGroup("mentors")}
-                color={selectedGroup === "mentors" ? "white" : "#000"}
+                color={selectedGroup === "mentors" ?Platform.OS==='android' ? "#0F6E69": 'white' : Platform.OS==='android' ? "gray" : 'black'}
               />
             </View>
             <View
@@ -275,7 +276,7 @@ const NewNotifScreen = () => {
               <Button
                 title="User"
                 onPress={() => setSelectedGroup("user")}
-                color={selectedGroup === "user" ? "white" : "#000"}
+                color={selectedGroup === "user" ? Platform.OS==='android' ? "#0F6E69": 'white' : Platform.OS==='android' ? "gray" : 'black'}
               />
             </View>
           </View>

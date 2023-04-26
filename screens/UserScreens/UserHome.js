@@ -26,10 +26,10 @@ const UserHome = () => {
       <AdminTopBar/>
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>
-            User Home
+            Welcome
         </Text>
         <Text style={styles.subHeaderText}>
-            Email: {auth.currentUser?.email}
+            {auth.currentUser?.displayName}
       </Text>
       </View>
       <AdminCalendar/>
@@ -65,6 +65,8 @@ const styles = StyleSheet.create({
     height: Constants.statusBarHeight
   },
   headerContainer: {
+    paddingLeft: 20,
+    alignSelf:'flex-start',
     marginVertical: 15,
   },
   headerText: {
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   subHeaderText: {
-    fontSize: 34,
+    fontSize: 28,
     fontWeight: '700',
   },
   calenderContainer: {

@@ -10,9 +10,10 @@ import { HeaderBackButton } from '@react-navigation/elements';
 const ChannelScreen = (props) => {
   const { channel } = useAppContext();
   const { navigation } = props;
+  const { memberName } = props.route.params;
   useLayoutEffect (() => {
     navigation.setOptions({
-        title: channel?.data?.name || "Channel",
+        title: memberName || "Channel",
         tabBarStyle: {display: 'none'},
         headerLeft: () => <HeaderBackButton onPress={()=>{navigation.goBack()}
       }
@@ -36,5 +37,9 @@ const ChannelScreen = (props) => {
 export default ChannelScreen
 
 const styles = StyleSheet.create({
+  container: {
+    
+    marginBottom: 40,
+  }
    
 })
